@@ -1,0 +1,15 @@
+# ROOT data files, including names such as sample.root.1
+*.root
+*.root.*
+
+# Compiled C++ and ROOT/ACLiC output
+*.o
+*.so
+*.a
+*.pcm
+*.d
+*_ACLiC_dict*
+
+# Python cache
+__pycache__/
+*.pyc

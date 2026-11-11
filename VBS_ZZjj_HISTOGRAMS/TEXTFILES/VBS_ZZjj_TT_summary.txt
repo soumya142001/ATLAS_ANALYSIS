@@ -1,0 +1,21 @@
+sumOfWeights:                              312.286
+Weight per event:                          0.00520476
+crossSection:                              0.0034597
+sf:                                        0.0110786
+lumi_sample:                               17342.5
+lumi_target:                               140
+lumi_scale:                                0.00807263
+number Events:                             60000
+sumOfWeights Calculated:                   60000
+Number Events after CUT0:                  60000
+Number Events after CUT1:                  46568
+Number Events after CUT2:                  44979
+Number Events after CUT3:                  5173
+Number Events after QCD CR:                11471
+Number Events after my QCD CR:             6299
+Lumi Sacled Number Events after CUT0:      484.358
+Lumi Scaled Number Events after CUT1:      375.926
+Lumi Scaled Number Events after CUT2:      363.099
+Lumi Scaled Number Events after CUT3:      41.7597
+Lumi Scaled Number Events after QCD CR:    92.6012
+Lumi Scaled Number Events after myQCD CR:  50.8495

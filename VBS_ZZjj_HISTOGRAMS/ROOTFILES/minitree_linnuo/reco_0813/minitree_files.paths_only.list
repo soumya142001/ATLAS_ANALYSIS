@@ -1,0 +1,76 @@
+# EWK: 701000
+mc/mc23.vbszz0709.701000.DAOD_PHYSLITE.e8543_s4159_r15224_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701000.DAOD_PHYSLITE.e8543_s4162_r14622_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701000.DAOD_PHYSLITE.e8543_s4369_r16083_p7266_vbszz_default.root
+
+# QCD: 701040
+mc/mc23.vbszz0709.701040.DAOD_PHYSLITE.e8582_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701040.DAOD_PHYSLITE.e8582_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701040.DAOD_PHYSLITE.e8582_s4369_r16083_p7266_vbszz_default.root
+
+# ggZZ: 605999
+mc/mc23.vbszz0709.605999.DAOD_PHYSLITE.e8615_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.605999.DAOD_PHYSLITE.e8615_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.605999.DAOD_PHYSLITE.e8615_s4369_r16083_p7266_vbszz_default.root
+
+# Others: 545790-545794, 701020, 701236, 701238, 701240, 701241
+mc/mc23.vbszz0709.545790.DAOD_PHYSLITE.e8551_s4159_r15530_p7017_vbszz_default.root
+mc/mc23.vbszz0709.545790.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545790.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545791.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545791.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545791.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545792.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545792.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545792.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545793.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545793.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545793.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545794.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545794.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.545794.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701020.DAOD_PHYSLITE.e8543_s4159_r15224_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701020.DAOD_PHYSLITE.e8543_s4162_r14622_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701020.DAOD_PHYSLITE.e8543_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701236.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701236.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701236.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701238.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701238.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701238.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701240.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701240.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701240.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701241.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701241.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root
+mc/mc23.vbszz0709.701241.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root
+
+# Fake/background Z+jets: 601189-601191
+fake/mc23.vbszzfake.601189.DAOD_PHYSLITE.e8514_s4159_r15530_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601189.DAOD_PHYSLITE.e8514_s4162_r15540_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601189.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601190.DAOD_PHYSLITE.e8514_s4159_r15530_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601190.DAOD_PHYSLITE.e8514_s4162_r15540_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601190.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4159_r15224_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4162_r14622_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root
+
+# Fake/background ttbar: 601230
+fake/mc23.vbszzfake.601230.DAOD_PHYSLITE.e8514_s4159_r15530_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601230.DAOD_PHYSLITE.e8514_s4162_r15540_p7266_vbszz_default.root
+fake/mc23.vbszzfake.601230.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root
+
+# Fake/background: 701045
+fake/mc23.vbszzfake.701045.DAOD_PHYSLITE.e8582_s4159_r15530_p7266_vbszz_default.root
+fake/mc23.vbszzfake.701045.DAOD_PHYSLITE.e8582_s4162_r15540_p7266_vbszz_default.root
+fake/mc23.vbszzfake.701045.DAOD_PHYSLITE.e8582_s4369_r16083_p7266_vbszz_default.root
+
+# Data 2022
+data/data22.vbszz0709.periodAllYear.DAOD_PHYSLITE.grp22_v01_p7019_vbszz_default.root
+
+# Data 2023
+data/data23.vbszz0709.periodAllYear.DAOD_PHYSLITE.grp23_v01_p7019_vbszz_default.root
+
+# Data 2024
+data/data24.vbszz0709.periodAllYear.DAOD_PHYSLITE.grp24_v01_p7019_vbszz_default.root

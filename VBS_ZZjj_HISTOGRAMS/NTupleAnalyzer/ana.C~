@@ -1,0 +1,35 @@
+#include <TROOT.h>
+#include <TChain.h>
+#include <TFile.h>
+#include <TString.h>
+/*
+This is a driver script.
+It decides which code to run over which sample, the names
+of output files and so on.
+*/
+
+
+void ana(TString sample = "incl_ZZjj_TT"){
+  TString sumfilename, rootfilename;
+  int data;
+  //Declare a chain for input files.
+  TChain *chain = new TChain("Nominal;1");
+  
+  //Declare an instance of our code class
+  MiniTree_Analyzer m_selec;
+  
+  if(sample=="incl_ZZjj_TT"){
+    //Add one file to chain. This is the input file.
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/merged/mc23_13p6TeV.546887.merged.root");
+    rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/incl_ZZjj_TT.root";
+    sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/incl_ZZjj_TT.txt";
+    data = 0; //data = 1, MC = 0
+  }
+
+  //Finally running the process
+  std::cout<<"Output Files are: "<<rootfilename<<" and "<<sumfilename<<std::endl;
+  m_selec.SetRootFileName(rootfilename);
+  m_selec.SetSumFileName(sumfilename);
+  m_selec.SetDataMCFlag(data);
+  chain->Process(&m_selec);
+}

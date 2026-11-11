@@ -1,0 +1,37 @@
+ |       | #it{t#bar{t}} + jets      | Single Top |
+ | #it{t#bar{t}} cross-section | 0.0992747 / -0.0993435 | 0 / 0 |
+ | Luminosity | 0.0496241 / -0.0496423 | 0.0496241 / -0.0496423 |
+ | Electron trigger eff. | 0.0274376 / -0.0274426 | 0 / 0 |
+ | Electron identification eff. | 0.0223217 / -0.022325 | 0 / 0 |
+ | Muon trigger eff. (stat) | 0.053257 / -0.0532781 | 0 / 0 |
+ | Muon trigger eff. (syst) | 0.0125841 / -0.0125852 | 0 / 0 |
+ | #it{b}-tag Eigenvar. 1 | -0.123854 / 0.124807 | -0.126678 / 0.12768 |
+ | #it{b}-tag Eigenvar. 2 | 0.0265443 / -0.0264419 | 0.0192894 / -0.0192348 |
+ | #it{b}-tag Eigenvar. 3 | -0.0133812 / 0.01338 | -0.00993721 / 0.00993656 |
+ | #it{c}-tag Eigenvar. 1 | -0.0717421 / 0.0714809 | -0.0683234 / 0.068084 |
+ | #it{c}-tag Eigenvar. 3 | 0.017399 / -0.0174017 | 0.0165767 / -0.0165792 |
+ | light-tag Eigenvar. 1 | -0.0386533 / 0.0386286 | -0.0569383 / 0.0568879 |
+ | JES NPScenario 1 - NP 1 | 0.0395511 / -0.0377428 | 0.0568487 / -0.0531767 |
+ | JES NPScenario 1 - NP 3 | 0.0118478 / -0.01181 | 0.0150184 / -0.0149577 |
+ | #it{t#bar{t}} ISR/FSR | -0.0309022 / 0.0308551 | 0 / 0 |
+ | #it{t#bar{t}} PS and hadronization | 0.0597988 / -0.0594535 | 0 / 0 |
+ | JER | 0 / -2.22045e-16 | 0 / 0 |
+ | Single top cross-section | 0 / 0 | 0.0496405 / -0.0496579 |
+ | light-tag Eigenvar. 3 | 0 / 0 | 0.0101427 / -0.0101434 |
+ | JES NPScenario 1 - NP 2 | 0 / 0 | 0.0324474 / -0.0324553 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_0 | 0.00114025 / -0.00114025 | 0.00078103 / -0.00078103 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_1 | 0.00397095 / -0.00397095 | 0.00519278 / -0.00519278 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_2 | 0.00605902 / -0.00605902 | 0.00708209 / -0.00708209 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_3 | 0.00700958 / -0.00700958 | 0.00969055 / -0.00969055 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_4 | 0.00887558 / -0.00887558 | 0.0102593 / -0.0102593 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_5 | 0.0117869 / -0.0117869 | 0.00886748 / -0.00886748 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_6 | 0.0121862 / -0.0121862 | 0.012888 / -0.012888 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_7 | 0.00770999 / -0.00770999 | 0.00756117 / -0.00756117 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_8 | 0.00713895 / -0.00713895 | 0.00469298 / -0.00469298 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_9 | 0.00506762 / -0.00506762 | 0.00324429 / -0.00324429 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_10 | 0.00479737 / -0.00479737 | 0.00223323 / -0.00223323 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_11 | 0.0037089 / -0.0037089 | 0.00212541 / -0.00212541 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_12 | 0.00259097 / -0.00259097 | 0.00312564 / -0.00312564 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_13 | 0.00219789 / -0.00219789 | 0.00384998 / -0.00384998 |
+ | gamma_stat_ljets_Mjj_HiggsMass_5j3b_bin_14 | 0.00596964 / -0.00596964 | 0.00923313 / -0.00923313 |
+ | #it{k}(#it{t#bar{t}}) | 0.198453 / -0.198453 | 0 / 0 |

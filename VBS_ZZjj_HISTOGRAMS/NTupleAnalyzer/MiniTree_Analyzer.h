@@ -1,0 +1,385 @@
+//////////////////////////////////////////////////////////
+// This class has been automatically generated on
+// Thu Sep 17 14:23:06 2026 by ROOT version 6.32.08
+// from TTree Nominal/Nominal
+// found on file: /home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/EWK_polar/mc23_13p6TeV.546888.MGPy8EG_A14_NNPDF23LO_ZZjjEW_4l_TL_rev.e8588_e8586_s4369_s4370_r16083_r15970_p7266.root
+//////////////////////////////////////////////////////////
+
+#ifndef MiniTree_Analyzer_h
+#define MiniTree_Analyzer_h
+
+#include <TROOT.h>
+#include <TChain.h>
+#include <TFile.h>
+#include <TDirectory.h>
+#include <TSelector.h>
+#include <TTreeReader.h>
+#include <TTreeReaderValue.h>
+#include <TTreeReaderArray.h>
+#include <TString.h>
+#include <TH1.h>
+#include "TLorentzVector.h"
+#include <vector>
+#include <algorithm>
+#include <fstream>
+#include <utility>
+
+
+// Headers needed by this particular selector
+#include <vector>
+
+#include <string>
+
+#include <ROOT/RVec.hxx>
+
+
+
+class MiniTree_Analyzer : public TSelector {
+public :
+   TTreeReader     fReader;  //!the tree reader
+   TTreeReader     fReader_MC;
+   TTreeReader     fReader_Data;
+   TTree           *fChain = 0;   //!pointer to the analyzed TTree or TChain
+
+   // Readers to access the data (delete the ones you do not need).
+   TTreeReaderValue<Float_t> AnalysisWeight = {fReader, "AnalysisWeight"};
+   TTreeReaderValue<Double_t> LumiWeight = {fReader, "LumiWeight"};
+   TTreeReaderValue<Float_t> pileupweight = {fReader, "pileupweight"};
+   TTreeReaderValue<Double_t> EventWeight = {fReader, "EventWeight"};
+   TTreeReaderValue<Bool_t> passTriggers = {fReader, "passTriggers"};
+   TTreeReaderValue<Float_t> MuonWeightReco = {fReader, "MuonWeightReco"};
+   TTreeReaderValue<Float_t> ElecWeightReco = {fReader, "ElecWeightReco"};
+   TTreeReaderValue<Float_t> jvtweight = {fReader, "jvtweight"};
+   TTreeReaderValue<Float_t> AntiIDElecWeightReco = {fReader, "AntiIDElecWeightReco"};
+   TTreeReaderValue<Float_t> AntiIDElecWeightTrigger = {fReader, "AntiIDElecWeightTrigger"};
+   TTreeReaderValue<Float_t> AntiIDMuonWeightReco = {fReader, "AntiIDMuonWeightReco"};
+   TTreeReaderValue<Float_t> AntiIDMuonWeightTrigger = {fReader, "AntiIDMuonWeightTrigger"};
+   TTreeReaderValue<Int_t> treatAsYear = {fReader, "treatAsYear"};
+   TTreeReaderValue<ULong64_t> EventNumber = {fReader, "EventNumber"};
+   TTreeReaderValue<Int_t> RunNumber = {fReader, "RunNumber"};
+   TTreeReaderValue<Float_t> nVertices = {fReader, "nVertices"};
+   TTreeReaderValue<Float_t> nVertices_PriVrt = {fReader, "nVertices_PriVrt"};
+   TTreeReaderValue<Int_t> nj_good = {fReader, "nj_good"};
+   TTreeReaderValue<Float_t> pT_1jet = {fReader, "pT_1jet"};
+   TTreeReaderValue<Float_t> eta_1jet = {fReader, "eta_1jet"};
+   TTreeReaderValue<Float_t> phi_1jet = {fReader, "phi_1jet"};
+   TTreeReaderValue<Float_t> m_1jet = {fReader, "m_1jet"};
+   TTreeReaderValue<Float_t> pT_2jet = {fReader, "pT_2jet"};
+   TTreeReaderValue<Float_t> eta_2jet = {fReader, "eta_2jet"};
+   TTreeReaderValue<Float_t> phi_2jet = {fReader, "phi_2jet"};
+   TTreeReaderValue<Float_t> m_2jet = {fReader, "m_2jet"};
+   TTreeReaderValue<Float_t> pT_3jet = {fReader, "pT_3jet"};
+   TTreeReaderValue<Float_t> eta_3jet = {fReader, "eta_3jet"};
+   TTreeReaderValue<Float_t> phi_3jet = {fReader, "phi_3jet"};
+   TTreeReaderValue<Float_t> m_3jet = {fReader, "m_3jet"};
+   TTreeReaderValue<Float_t> pT_4jet = {fReader, "pT_4jet"};
+   TTreeReaderValue<Float_t> eta_4jet = {fReader, "eta_4jet"};
+   TTreeReaderValue<Float_t> phi_4jet = {fReader, "phi_4jet"};
+   TTreeReaderValue<Float_t> m_4jet = {fReader, "m_4jet"};
+   TTreeReaderValue<Bool_t> has_dijet = {fReader, "has_dijet"};
+   TTreeReaderValue<Float_t> tagjet1_pt = {fReader, "tagjet1_pt"};
+   TTreeReaderValue<Float_t> tagjet1_eta = {fReader, "tagjet1_eta"};
+   TTreeReaderValue<Float_t> tagjet1_y = {fReader, "tagjet1_y"};
+   TTreeReaderValue<Float_t> tagjet1_phi = {fReader, "tagjet1_phi"};
+   TTreeReaderValue<Float_t> tagjet1_m = {fReader, "tagjet1_m"};
+   TTreeReaderValue<Float_t> tagjet2_pt = {fReader, "tagjet2_pt"};
+   TTreeReaderValue<Float_t> tagjet2_eta = {fReader, "tagjet2_eta"};
+   TTreeReaderValue<Float_t> tagjet2_y = {fReader, "tagjet2_y"};
+   TTreeReaderValue<Float_t> tagjet2_phi = {fReader, "tagjet2_phi"};
+   TTreeReaderValue<Float_t> tagjet2_m = {fReader, "tagjet2_m"};
+   TTreeReaderValue<Float_t> mjj = {fReader, "mjj"};
+   TTreeReaderValue<Float_t> delta_y_jj = {fReader, "delta_y_jj"};
+   TTreeReaderValue<Float_t> yj1_yj2 = {fReader, "yj1_yj2"};
+   TTreeReaderValue<Float_t> dEta_jj = {fReader, "dEta_jj"};
+   TTreeReaderValue<Float_t> DeltaYjj = {fReader, "DeltaYjj"};
+   TTreeReaderValue<Float_t> absDeltaYjj = {fReader, "absDeltaYjj"};
+   TTreeReaderValue<Float_t> Yj1Yj2 = {fReader, "Yj1Yj2"};
+   TTreeReaderValue<Int_t> num_bjets = {fReader, "num_bjets"};
+   TTreeReaderValue<Float_t> pT_1lep = {fReader, "pT_1lep"};
+   TTreeReaderValue<Float_t> eta_1lep = {fReader, "eta_1lep"};
+   TTreeReaderValue<Float_t> phi_1lep = {fReader, "phi_1lep"};
+   TTreeReaderValue<Int_t> charge_1lep = {fReader, "charge_1lep"};
+   TTreeReaderValue<Int_t> ifftype_1lep = {fReader, "ifftype_1lep"};
+   TTreeReaderValue<Float_t> pT_2lep = {fReader, "pT_2lep"};
+   TTreeReaderValue<Float_t> eta_2lep = {fReader, "eta_2lep"};
+   TTreeReaderValue<Float_t> phi_2lep = {fReader, "phi_2lep"};
+   TTreeReaderValue<Int_t> charge_2lep = {fReader, "charge_2lep"};
+   TTreeReaderValue<Int_t> ifftype_2lep = {fReader, "ifftype_2lep"};
+   TTreeReaderValue<Float_t> pT_3lep = {fReader, "pT_3lep"};
+   TTreeReaderValue<Float_t> eta_3lep = {fReader, "eta_3lep"};
+   TTreeReaderValue<Float_t> phi_3lep = {fReader, "phi_3lep"};
+   TTreeReaderValue<Int_t> charge_3lep = {fReader, "charge_3lep"};
+   TTreeReaderValue<Int_t> ifftype_3lep = {fReader, "ifftype_3lep"};
+   TTreeReaderValue<Float_t> pT_4lep = {fReader, "pT_4lep"};
+   TTreeReaderValue<Float_t> eta_4lep = {fReader, "eta_4lep"};
+   TTreeReaderValue<Float_t> phi_4lep = {fReader, "phi_4lep"};
+   TTreeReaderValue<Int_t> charge_4lep = {fReader, "charge_4lep"};
+   TTreeReaderValue<Int_t> ifftype_4lep = {fReader, "ifftype_4lep"};
+   TTreeReaderValue<Bool_t> zz_leptons_are_top4 = {fReader, "zz_leptons_are_top4"};
+   TTreeReaderValue<Float_t> pT_1AntiIDlep = {fReader, "pT_1AntiIDlep"};
+   TTreeReaderValue<Float_t> eta_1AntiIDlep = {fReader, "eta_1AntiIDlep"};
+   TTreeReaderValue<Float_t> phi_1AntiIDlep = {fReader, "phi_1AntiIDlep"};
+   TTreeReaderValue<Int_t> charge_1AntiIDlep = {fReader, "charge_1AntiIDlep"};
+   TTreeReaderValue<Int_t> type_1AntiIDlep = {fReader, "type_1AntiIDlep"};
+   TTreeReaderValue<Int_t> AntiIDifftype = {fReader, "AntiIDifftype"};
+   TTreeReaderValue<Int_t> AntiIDnhit = {fReader, "AntiIDnhit"};
+   TTreeReaderValue<Float_t> mllll = {fReader, "mllll"};
+   TTreeReaderValue<Float_t> mllll_T = {fReader, "mllll_T"};
+   TTreeReaderValue<Int_t> lepton_charge_sum = {fReader, "lepton_charge_sum"};
+   TTreeReaderValue<Int_t> num_sfos_pair = {fReader, "num_sfos_pair"};
+   TTreeReaderArray<int> lepton_wp = {fReader, "lepton_wp"};
+   TTreeReaderArray<float> lepton_pt = {fReader, "lepton_pt"};
+   TTreeReaderArray<float> lepton_eta = {fReader, "lepton_eta"};
+   TTreeReaderArray<float> lepton_phi = {fReader, "lepton_phi"};
+   TTreeReaderArray<float> lepton_e = {fReader, "lepton_e"};
+   TTreeReaderArray<int> lepton_charge = {fReader, "lepton_charge"};
+   TTreeReaderArray<int> lepton_flavor = {fReader, "lepton_flavor"};
+   TTreeReaderArray<float> lepton_z0sinTheta = {fReader, "lepton_z0sinTheta"};
+   TTreeReaderArray<float> lepton_d0sig = {fReader, "lepton_d0sig"};
+   TTreeReaderArray<string> sfos_type = {fReader, "sfos_type"};
+   TTreeReaderValue<Float_t> sfos_m_1 = {fReader, "sfos_m_1"};
+   TTreeReaderValue<Float_t> sfos_m_2 = {fReader, "sfos_m_2"};
+   TTreeReaderValue<Float_t> sfos_pT_1 = {fReader, "sfos_pT_1"};
+   TTreeReaderValue<Float_t> sfos_pT_2 = {fReader, "sfos_pT_2"};
+   TTreeReaderValue<Float_t> sfos_eta_1 = {fReader, "sfos_eta_1"};
+   TTreeReaderValue<Float_t> sfos_eta_2 = {fReader, "sfos_eta_2"};
+   TTreeReaderValue<Float_t> sfos_phi_1 = {fReader, "sfos_phi_1"};
+   TTreeReaderValue<Float_t> sfos_phi_2 = {fReader, "sfos_phi_2"};
+   TTreeReaderValue<string> sfos_type_1 = {fReader, "sfos_type_1"};
+   TTreeReaderValue<string> sfos_type_2 = {fReader, "sfos_type_2"};
+   TTreeReaderValue<Float_t> dEta_sfos_12 = {fReader, "dEta_sfos_12"};
+   TTreeReaderValue<Float_t> dPhi_sfos_12 = {fReader, "dPhi_sfos_12"};
+   TTreeReaderValue<Float_t> dR_sfos_12 = {fReader, "dR_sfos_12"};
+   TTreeReaderValue<Float_t> pT_llll = {fReader, "pT_llll"};
+   TTreeReaderValue<Float_t> dR_ll_12 = {fReader, "dR_ll_12"};
+   TTreeReaderValue<Float_t> dR_ll_34 = {fReader, "dR_ll_34"};
+   TTreeReaderValue<Float_t> dR_ll_13 = {fReader, "dR_ll_13"};
+   TTreeReaderValue<Float_t> dR_ll_14 = {fReader, "dR_ll_14"};
+   TTreeReaderValue<Float_t> dR_ll_23 = {fReader, "dR_ll_23"};
+   TTreeReaderValue<Float_t> dR_ll_24 = {fReader, "dR_ll_24"};
+   TTreeReaderValue<Float_t> min_dR_4l = {fReader, "min_dR_4l"};
+   TTreeReaderValue<Float_t> dEta_ll_12 = {fReader, "dEta_ll_12"};
+   TTreeReaderValue<Float_t> dEta_ll_34 = {fReader, "dEta_ll_34"};
+   TTreeReaderValue<Float_t> dPhi_ll_12 = {fReader, "dPhi_ll_12"};
+   TTreeReaderValue<Float_t> dPhi_ll_34 = {fReader, "dPhi_ll_34"};
+   TTreeReaderValue<Float_t> m_ll_12 = {fReader, "m_ll_12"};
+   TTreeReaderValue<Float_t> m_ll_34 = {fReader, "m_ll_34"};
+   TTreeReaderValue<Float_t> m_ll_14 = {fReader, "m_ll_14"};
+   TTreeReaderValue<Float_t> m_ll_23 = {fReader, "m_ll_23"};
+   TTreeReaderValue<Float_t> mT_ll_12 = {fReader, "mT_ll_12"};
+   TTreeReaderValue<Float_t> mT_ll_34 = {fReader, "mT_ll_34"};
+   TTreeReaderValue<Float_t> dPhi_leading_ll_l = {fReader, "dPhi_leading_ll_l"};
+   TTreeReaderValue<Float_t> dPhi_subleading_ll_l = {fReader, "dPhi_subleading_ll_l"};
+   TTreeReaderValue<Int_t> nsignalLep = {fReader, "nsignalLep"};
+   TTreeReaderValue<Int_t> nbaselineLep = {fReader, "nbaselineLep"};
+   TTreeReaderValue<Int_t> nEl = {fReader, "nEl"};
+   TTreeReaderValue<Int_t> nMu = {fReader, "nMu"};
+   TTreeReaderValue<Int_t> nbaselineEl = {fReader, "nbaselineEl"};
+   TTreeReaderValue<Int_t> nbaselineMu = {fReader, "nbaselineMu"};
+   TTreeReaderValue<Int_t> nAntiIDLep = {fReader, "nAntiIDLep"};
+   TTreeReaderValue<Int_t> nAntiIDMu = {fReader, "nAntiIDMu"};
+   TTreeReaderValue<Int_t> nAntiIDEl = {fReader, "nAntiIDEl"};
+   TTreeReaderValue<Float_t> truth_pT_1lep = {fReader, "truth_pT_1lep"};
+   TTreeReaderValue<Float_t> truth_eta_1lep = {fReader, "truth_eta_1lep"};
+   TTreeReaderValue<Float_t> truth_pT_2lep = {fReader, "truth_pT_2lep"};
+   TTreeReaderValue<Float_t> truth_eta_2lep = {fReader, "truth_eta_2lep"};
+   TTreeReaderValue<Float_t> truth_phi_2lep = {fReader, "truth_phi_2lep"};
+   TTreeReaderValue<Float_t> truth_pT_3lep = {fReader, "truth_pT_3lep"};
+   TTreeReaderValue<Float_t> truth_eta_3lep = {fReader, "truth_eta_3lep"};
+   TTreeReaderValue<Float_t> truth_mll = {fReader, "truth_mll"};
+   TTreeReaderValue<Float_t> truth_mllll = {fReader, "truth_mllll"};
+   TTreeReaderValue<Float_t> truth_mllll_t = {fReader, "truth_mllll_t"};
+   TTreeReaderValue<Float_t> truth_pT_llll = {fReader, "truth_pT_llll"};
+   TTreeReaderValue<Float_t> truth_m_ll_12 = {fReader, "truth_m_ll_12"};
+   TTreeReaderValue<Float_t> truth_m_ll_13 = {fReader, "truth_m_ll_13"};
+   TTreeReaderValue<Float_t> truth_mT_ll_12 = {fReader, "truth_mT_ll_12"};
+   TTreeReaderValue<Float_t> truth_mT_ll_13 = {fReader, "truth_mT_ll_13"};
+   TTreeReaderArray<float> el_pt = {fReader, "el_pt"};
+   TTreeReaderArray<float> el_eta = {fReader, "el_eta"};
+   TTreeReaderArray<float> el_phi = {fReader, "el_phi"};
+   TTreeReaderArray<float> el_e = {fReader, "el_e"};
+   TTreeReaderArray<int> el_charge = {fReader, "el_charge"};
+   TTreeReaderArray<int> el_ifftype = {fReader, "el_ifftype"};
+   TTreeReaderArray<float> mu_pt = {fReader, "mu_pt"};
+   TTreeReaderArray<float> mu_eta = {fReader, "mu_eta"};
+   TTreeReaderArray<float> mu_phi = {fReader, "mu_phi"};
+   TTreeReaderArray<float> mu_e = {fReader, "mu_e"};
+   TTreeReaderArray<int> mu_charge = {fReader, "mu_charge"};
+   TTreeReaderArray<int> mu_ifftype = {fReader, "mu_ifftype"};
+   TTreeReaderArray<float> el_antiID_pt = {fReader, "el_antiID_pt"};
+   TTreeReaderArray<float> el_antiID_eta = {fReader, "el_antiID_eta"};
+   TTreeReaderArray<float> el_antiID_phi = {fReader, "el_antiID_phi"};
+   TTreeReaderArray<float> el_antiID_e = {fReader, "el_antiID_e"};
+   TTreeReaderArray<int> el_antiID_charge = {fReader, "el_antiID_charge"};
+   TTreeReaderArray<int> el_antiID_ifftype = {fReader, "el_antiID_ifftype"};
+   TTreeReaderArray<float> mu_antiID_pt = {fReader, "mu_antiID_pt"};
+   TTreeReaderArray<float> mu_antiID_eta = {fReader, "mu_antiID_eta"};
+   TTreeReaderArray<float> mu_antiID_phi = {fReader, "mu_antiID_phi"};
+   TTreeReaderArray<float> mu_antiID_e = {fReader, "mu_antiID_e"};
+   TTreeReaderArray<int> mu_antiID_charge = {fReader, "mu_antiID_charge"};
+   TTreeReaderArray<int> mu_antiID_ifftype = {fReader, "mu_antiID_ifftype"};
+
+
+   MiniTree_Analyzer(TTree * /*tree*/ =0) { }
+   ~MiniTree_Analyzer() override { }
+   Int_t   Version() const override { return 2; }
+   void    Begin(TTree *tree) override;
+   void    SlaveBegin(TTree *tree) override;
+   void    Init(TTree *tree) override;
+   bool    Notify() override;
+   bool    Process(Long64_t entry) override;
+   Int_t   GetEntry(Long64_t entry, Int_t getall = 0) override { return fChain ? fChain->GetTree()->GetEntry(entry, getall) : 0; }
+   void    SetOption(const char *option) override { fOption = option; }
+   void    SetObject(TObject *obj) override { fObject = obj; }
+   void    SetInputList(TList *input) override { fInput = input; }
+   TList  *GetOutputList() const override { return fOutput; }
+   void    SlaveTerminate() override;
+   void    Terminate() override;
+
+  //User Defined functions
+
+  void BookHistograms();
+  void BookTTree();
+  void BookUnfoldHist();
+  void SetRootFileName(TString rootfilename){_rootfilename = rootfilename; }
+  void SetSumFileName(TString sumfilename){_sumfilename = sumfilename;}
+  void SetDataMCFlag(int data){_data = data;}
+  void SetXS(double xs){_xs = xs;}
+
+  struct Particle{
+    int flavor; //electron=0, muon=1
+    int charge;
+    int pdgid;
+    int uid; //Unique ID to identify leptons
+    TLorentzVector v;
+    float z0sintheta;
+    float d0sig;
+  };
+  
+  using ParticlePair = std::pair<Particle,Particle>;
+  
+  struct Zstate : public ParticlePair {
+    Zstate() { }
+    Zstate(ParticlePair _particlepair) : ParticlePair(_particlepair) { }
+    TLorentzVector mom() const { return first.v + second.v; }
+    double Zmass() const { return mom().M(); }
+    double Zdist() const { return fabs(mom().M() -  91.1876); }
+    int flavor() const { return first.flavor; }
+    Particle lminus() const { return (first.pdgid > 0) ? first : second; }
+    Particle lplus() const { return (first.pdgid > 0) ? second : first; }      
+  };
+
+
+  //Generic Sort function
+  template<typename T, typename KeyFunc>
+  void sortByProperty(std::vector<T>& vec, KeyFunc keyFunc, bool descending = true) {
+    std::sort(vec.begin(), vec.end(),
+	      [&](const T& a, const T& b) {
+		return descending ? keyFunc(a) > keyFunc(b) : keyFunc(a) < keyFunc(b);
+	      });
+  }
+
+  bool isOSSF(const Particle& p1, const Particle& p2){
+    int charge1 = p1.charge;
+    int charge2 = p2.charge;
+    int flavor1 = p1.flavor;
+    int flavor2 = p2.flavor;
+    
+    return charge1*charge2 < 0 && (flavor1 == flavor2) ;
+  }
+  
+  bool shareLeptons(const Zstate& z1, const Zstate& z2){
+    return ((z1.first.uid == z2.first.uid) || (z1.first.uid == z2.second.uid) || (z1.second.uid == z2.first.uid) || (z1.second.uid == z2.second.uid));
+  }
+    
+protected:
+
+  /***********************************************
+   Defining a map of histograms to string
+  ***********************************************/
+  std::map<std::string, TH1D*> h;
+  
+private:
+  
+  int _data; //Flag to identify data/MC
+  double _xs;
+  int nevents;
+  int n_SR, n_CR;
+  
+  
+  /************************************************************
+           Define the Particle vectors here
+  *************************************************************/
+  vector<Particle> leptons;
+  vector<Zstate> Z_candidates;
+  vector<pair<Zstate,Zstate>> ZZ_candidates;
+  
+  /************************************************************
+           Define the tree branches vectors and parameters here
+  *************************************************************/
+
+  //Lepton Parameters
+  int           _number_leptons;
+  vector<float> _lepton_pT;
+  vector<float> _lepton_pdgid;
+  
+  /********************************************************
+       ROOT and Summary file Specific Parameters
+  ********************************************************/
+  TString  _sumfilename;
+  TString  _rootfilename;
+  TFile*   _rootfile;
+   
+  /*******************************************
+            TTree specific parameters
+  *********************************************/
+  TTree*   _tree;
+
+  /*************************************
+          Creating Sub-Directories
+  **************************************/
+
+  TDirectory* _unfoldhist_dir;
+  TDirectory* _tree_dir;
+  TDirectory* _hist_dir;
+
+  
+   ClassDefOverride(MiniTree_Analyzer,0);
+
+};
+
+#endif
+
+#ifdef MiniTree_Analyzer_cxx
+void MiniTree_Analyzer::Init(TTree *tree)
+{
+   // The Init() function is called when the selector needs to initialize
+   // a new tree or chain. Typically here the reader is initialized.
+   // It is normally not necessary to make changes to the generated
+   // code, but the routine can be extended by the user if needed.
+   // Init() will be called many times when running on PROOF
+   // (once per file to be processed).
+
+  fReader              .SetTree(tree); //fReader is used to read all the common branches
+  if(_data == 0)                        
+    fReader_MC         .SetTree(tree); //If Input file is MC
+  else if(_data == 1) 
+    fReader_Data       .SetTree(tree); //If Input file is Data
+  
+  fReader.SetTree(tree);
+  
+}
+
+bool MiniTree_Analyzer::Notify()
+{
+   // The Notify() function is called when a new file is opened. This
+   // can be either for a new TTree in a TChain or when when a new TTree
+   // is started when using PROOF. It is normally not necessary to make changes
+   // to the generated code, but the routine can be extended by the
+   // user if needed. The return value is currently not used.
+
+   return true;
+}
+
+
+#endif // #ifdef MiniTree_Analyzer_cxx

@@ -1,0 +1,237 @@
+#include "TFile.h"
+#include "TH1.h"
+#include "TEfficiency.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "THStack.h"
+#include "TF1.h"
+#include "TString.h"
+#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <TH1D.h>
+
+using std::cout;
+using std::endl;
+
+/* ===================================
+
+This is the regular overlay script example for beginners.
+Author: Soumya Sarkar
+Usage : At the root prompt
+    [].x overlay.C
+
+This file is modified to work in Root6.
+
+The primary function in this file is overlay().
+
+   =================================== */
+
+
+
+// Declare all the other functions needed. See the function implementations for more
+// comments about what the functions do.
+void decorate(TH1F *h,const char* xtitle, const char* ytitle, const char* title,
+	      int linecolor, int linewidth, int markercolor, int markerstyle, int tofill);
+void decorate(TLegend *g, float textSize, TString legendheader);
+float get_nevents(TH1D *hst, float bin_lo, float bin_hi);
+float get_nevents_err(TH1D *hst, float bin_lo, float bin_hi);
+
+
+void overlay()
+{
+
+  //Declare number of files
+  const int nfile = 3;
+  int colors[nfile] = {kGreen+1, kBlue+1, kOrange+1}; //, kRed+1, kCyan+1, kPink+1};
+  //int colors[nfile] = {kRed+1,kBlue+1,kGreen+2,kMagenta+1,kOrange+7,kCyan+1,kBlack};
+  
+  //First declare the file names (just strings)
+  TString filename[nfile];
+  TString samplename[nfile];
+
+  //Defining the Parameters of the Plot
+  double XMIN = -1;
+  double XMAX = 1;
+  double YMIN = 0;
+  double YMAX = 0.04;
+  double binwidth = 0.05;
+  TString plotname = "costheta2_ZZRest;1";
+  bool isEWK =false;
+  TString EWname;
+  if(isEWK) EWname = "EWK";
+  else EWname = "";
+  //Also give fancy name for the axis titles
+  TString xtitle = "P_{T}^{Z1} ZZRest"; 
+  TString ytitle = "Events";
+  
+ 
+  if(!isEWK){
+    filename[0] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/incl_ZZjj_TT.root";
+    filename[1] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/incl_ZZjj_TL.root";
+    filename[2] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/incl_ZZjj_LL.root";
+    samplename[0] = "incl TT";
+    samplename[1] = "incl TL";
+    samplename[2] = "incl LL";
+  }
+  
+  if(isEWK){
+    filename[0] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/VBS_ZZjjEW_TT.root";
+    filename[1] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/VBS_ZZjjEW_TL.root";
+    filename[2] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/VBS_ZZjjEW_LL.root";
+    samplename[0] = "VBS EW TT";
+    samplename[1] = "VBS EW TL";
+    samplename[2] = "VBS EW LL";
+  }
+  
+  //filename[6] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/VBS_incl_ZZjj_xsweighted.root";
+  //filename[7] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/QCD_ggllll_M4l130.root";
+  //filename[8] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/QCD_gg4l_M4l_70_3000.root";
+  //filename[9] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/incl_ZZ_QCD_xsweighted.root";
+  
+  //samplename[6] = "VBS_EW_ZZjj_xsweighted";
+  //samplename[7] = "QCD_ggllll_M4l130_xsweighted";
+  //samplename[8] = "QCD_gg4l_M4l_70_3000";
+  //samplename[9] = "incl_ZZ_QCD_xsweighted";
+    
+
+  // Open the files
+  TFile *file[nfile];
+  for(int i=0;i<nfile;i++){
+    file[i] = new TFile(filename[i]);
+  }
+  
+  // Open the respective histograms from the files
+  TH1F *h[nfile];
+
+  for(int i=0;i<nfile;i++){
+    h[i] = (TH1F*)file[i]->Get(plotname);
+    double binw = h[i]->GetBinWidth(1);
+    int nrebins = static_cast<int>(binwidth/binw);
+    h[i]->Rebin(nrebins);
+    //Scale all histograms to area 1
+    h[i]->Scale(1/h[i]->Integral());
+  }
+
+  //Decorate the histograms using function decorate 
+  // See function definition below for syntax
+  // See https://root.cern.ch/root/html/TColor.html for color names
+
+  // Declare a canvas 
+  TCanvas *c1 = new TCanvas("c1","c1",800,600);
+  c1->SetTitle("");
+  
+  // Define a legend
+  TLegend *lg = new TLegend(0.65,0.60,0.85,0.80,NULL,"NDC");
+  decorate(lg,0.02,""); // Decorated the legend using function below.
+  	
+  //Getting the Xmax, Xmin and Ymax and Ymin for the histogram
+  //double xmin = h[0]->GetXaxis()->GetXmin();
+  //double xmax = h[0]->GetXaxis()->GetXmax();
+  double xmax = XMAX;
+  double xmin = XMIN;
+  double ymin = YMIN;
+  double ymax = YMAX;
+  h[0]->Draw("HIST");
+  h[0]->GetXaxis()->SetRangeUser(xmin,xmax);
+  h[0]->GetYaxis()->SetRangeUser(0, ymax);
+  for(int i=0;i<nfile;i++){
+    h[i]->SetStats(0);
+    h[i]->SetLineColor(colors[i]);
+    //h[i]->SetFillColor(colors[i]);
+    h[i]->SetLineWidth(4);
+    h[i]->SetTitle("");
+    h[i]->Draw("HIST SAME"); 
+    decorate(h[i],xtitle,ytitle,"",colors[i],4,kGreen+2,20,0);
+    lg->AddEntry(h[i],samplename[i],"l");
+    gPad->Update();
+  }
+  
+  lg->Draw();
+
+  //Adding Text to the histograms
+  TLatex txt;
+  txt.SetNDC(true);
+  txt.SetTextFont(42);
+  txt.SetTextSize(0.03);
+  txt.DrawLatex(0.13,0.84,
+		Form("#splitline{#it{#bf{ATLAS Simulation: Work in Progress}}}{#sqrt{s} = 13.6 TeV, 140 fb^{-1}}")
+		);
+
+  
+  c1->SaveAs("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/Plots/POLARIZATION_PLOTS/"+plotname+"_overlay"+EWname+".png");
+}
+
+/*
+This function decorates the histogram, by setting the titles of the X and Y axes,
+by setting the line and marker colors, the marker style, and by deciding whether
+to fill in the histogram with a color or not.
+ */
+void decorate(TH1F* h,const char* xtitle, const char* ytitle, const char* title,
+	      int linecolor, int linewidth, int markercolor, int markerstyle, int tofill) {
+
+  h->GetXaxis()->SetTitle(xtitle);
+  h->GetYaxis()->SetTitle(ytitle);
+  //h->SetTitle("Efficiency vs truth Eta");
+  h->SetLineColor(linecolor); 
+  h->SetLineWidth(linewidth);
+  h->SetMarkerColor(markercolor);
+  h->SetMarkerStyle(markerstyle);
+  if(tofill==1) h->SetFillColor(markercolor);
+
+  h->SetMarkerSize(0.25);
+  //h->SetTitle(title);
+}
+
+/*
+This function decorates the legend, by setting the textsize, and filling in the
+legend with a pure white color.
+ */
+void decorate(TLegend *g, float textSize, TString legendheader)
+{
+  g->SetTextSize(textSize);
+  g->SetFillStyle(1);
+  g->SetFillColor(10);
+  g->SetBorderSize(1);
+  g->SetLineColor(10);
+  //Usually legends should not have headers
+  //but if you want one, uncomment the next line.
+  //g->SetHeader(legendheader);
+}
+
+
+// Here are a couple of other utility functions
+
+// For a given histogram hst, return the number of entries between bin_lo and bin_hi
+float get_nevents(TH1D *hst, float bin_lo, float bin_hi)
+{
+  int bin_width = hst->GetBinWidth(1);
+  int ibin_begin = 1;
+  float nevents = 0;
+  while ( hst->GetBinCenter(ibin_begin) < bin_lo )
+    ibin_begin++;
+  int ibin_end = ibin_begin;
+  while ( hst->GetBinCenter(ibin_end) < bin_hi )
+    ibin_end++;
+  for(int i=ibin_begin; i<ibin_end; i++)
+    nevents += hst->GetBinContent(i);
+
+  return nevents;
+}
+// Partner function for above, returning the error for the above nevents
+float get_nevents_err(TH1D *hst, float bin_lo, float bin_hi)
+{
+  int bin_width = hst->GetBinWidth(1);
+  int ibin_begin = 1;
+  float nevents_err = 0;
+  while ( hst->GetBinCenter(ibin_begin) < bin_lo )
+    ibin_begin++;
+  int ibin_end = ibin_begin;
+  while ( hst->GetBinCenter(ibin_end) < bin_hi )
+    ibin_end++;
+  for(int i=ibin_begin; i<ibin_end; i++)
+    nevents_err += pow(hst->GetBinError(i),2);
+  nevents_err = sqrt(nevents_err);
+
+  return nevents_err;
+}

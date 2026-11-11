@@ -1,0 +1,3 @@
+ |       | #it{t#bar{t}} + jets      | Single Top |
+ | Instrumental | -0.00357 | -0.0756 |
+ | Theory | 0.129 | 0.0496 |

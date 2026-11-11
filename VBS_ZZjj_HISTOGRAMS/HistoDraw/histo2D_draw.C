@@ -1,0 +1,155 @@
+#include "TFile.h"
+#include "TH1.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "THStack.h"
+#include "TF1.h"
+#include "TString.h"
+#include <iostream>
+#include <fstream>
+#include <math.h>
+
+using std::cout;
+using std::endl;
+
+void decorate(TH2*h,const char* xtitle, const char* ytitle, const char* title,
+	      int linecolor, int linewidth, int markercolor, int markerstyle, int tofill);
+void decorate(TLegend *g, float textSize, TString legendheader);
+float get_nevents(TH2F *hst, float bin_lo, float bin_hi);
+float get_nevents_err(TH2F *hst, float bin_lo, float bin_hi);
+
+void histo2D_draw()
+{
+
+  TString filename = "VBS_ZZjj_TT.root";
+  TString plotname = "_ATLAS_VBS_ZZ_test_Number_ZZcandidates_vs_channels_cut0";
+
+  TString xtitle = "#bf{Number of ZZ candidates}";
+  TString ytitle = "#bf{Channels}";
+
+  TFile *file = new TFile(filename);
+
+
+  TH2D *h2D = (TH2D*)file->Get(plotname);
+  
+  //Normalisation
+  
+  //h->Scale(1.0/h->Integral());
+
+  //Decorate
+
+  //decorate(h2D,xtitle,ytitle,"",kRed+2,1,kRed+2,20,0);
+  
+  TCanvas *c1 = new TCanvas("canvas","canvas",800,600);
+
+  //Log scaling
+  //c1->SetLogy();
+  //Histogram properties
+  h2D->SetTitle("");
+  h2D->GetXaxis()->SetRangeUser(0,20);
+  h2D->GetYaxis()->SetRangeUser(0,100);
+  h2D->GetXaxis()->SetTitle("Number of ZZ candidates");
+  h2D->GetYaxis()->SetTitle("Channels");
+  h2D->SetStats(0);
+  
+  h2D->Add(h2D, 1e-9); //Tiny offset to get rid of white background
+  h2D->Draw("COLZ");
+  gStyle->SetPalette(kMint);
+  gStyle->SetTextSize(20);
+  gStyle->SetTextColor(kBlack);
+  gStyle->SetTextFont(62);
+  gStyle->SetPaintTextFormat("4.0f");
+  
+  h2D->Draw("TEXT SAME");
+    
+  //Adding Text to the histograms
+  TLatex txt;
+  txt.SetNDC(true);
+  txt.SetTextFont(42);
+  txt.SetTextSize(0.03);
+  txt.DrawLatex(0.1,0.92,"#it{#bf{ATLAS Simulation: Work in Progress}}");
+
+  //Adding the legends
+  TLegend *lg1 = new TLegend(0.55,0.50,0.85,0.75,NULL,"NDC");
+  decorate(lg1,0.05,"");
+  lg1->Draw();
+  
+
+  TString variable = plotname;
+  //c1->SaveAs("Plots/"+name+".png");
+  // c1->SaveAs("/home/soumya/CMSSW_files/NTuples/Analyzer/Plots/var_plots/"+variable+".png");
+}
+
+
+void decorate(TH1*h,const char* xtitle, const char* ytitle, const char* title,
+	      int linecolor, int linewidth, int markercolor, int markerstyle, int tofill) {
+
+  h->GetXaxis()->SetTitle(xtitle);
+  h->GetYaxis()->SetTitle(ytitle);
+  h->GetXaxis()->SetTitleSize(0.04);
+  h->GetYaxis()->SetTitleSize(0.04);
+  h->GetXaxis()->CenterTitle(true);
+  h->GetYaxis()->CenterTitle(true);
+  h->GetXaxis()->CenterTitle(true);
+  h->GetYaxis()->CenterTitle(true);
+  h->GetYaxis()->SetTitleOffset(1.2);
+  h->GetXaxis()->SetTitleOffset(1);
+
+  h->SetLineColor(linecolor); 
+  h->SetLineWidth(linewidth);
+  h->SetMarkerColor(markercolor);
+  h->SetMarkerStyle(markerstyle);
+  if(tofill==1) h->SetFillColor(markercolor);
+
+  h->SetMarkerSize(0.25);
+  h->SetTitle(title);
+}
+
+
+void decorate(TLegend *g, float textSize, TString legendheader)
+{
+  g->SetTextSize(textSize);
+  g->SetFillStyle(1);
+  g->SetFillColor(10);
+  g->SetBorderSize(1);
+  g->SetLineColor(10);
+  //Usually legends should not have headers
+  //but if you want one, uncomment the next line.
+  //g->SetHeader(legendheader);
+}
+
+
+// For a given histogram hst, return the number of entries between bin_lo and bin_hi
+float get_nevents(TH1F *hst, float bin_lo, float bin_hi)
+{
+  int bin_width = hst->GetBinWidth(1);
+  int ibin_begin = 1;
+  float nevents = 0;
+  while ( hst->GetBinCenter(ibin_begin) < bin_lo )
+    ibin_begin++;
+  int ibin_end = ibin_begin;
+  while ( hst->GetBinCenter(ibin_end) < bin_hi )
+    ibin_end++;
+  for(int i=ibin_begin; i<ibin_end; i++)
+    nevents += hst->GetBinContent(i);
+
+  return nevents;
+}
+
+// Partner function for above, returning the error for the above nevents
+float get_nevents_err(TH1F *hst, float bin_lo, float bin_hi)
+{
+  int bin_width = hst->GetBinWidth(1);
+  int ibin_begin = 1;
+  float nevents_err = 0;
+  while ( hst->GetBinCenter(ibin_begin) < bin_lo )
+    ibin_begin++;
+  int ibin_end = ibin_begin;
+  while ( hst->GetBinCenter(ibin_end) < bin_hi )
+    ibin_end++;
+  for(int i=ibin_begin; i<ibin_end; i++)
+    nevents_err += pow(hst->GetBinError(i),2);
+  nevents_err = sqrt(nevents_err);
+
+  return nevents_err;
+}

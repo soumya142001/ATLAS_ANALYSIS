@@ -1,0 +1,101 @@
+# VBS ZZ reconstructed minitree event and weight summary
+# Tree: Nominal
+# Columns: relative_file  events  sum_event_weight
+# MC/fake sum_event_weight is Sum(EventWeight) before multiplying by luminosity.
+# MC/fake plotting yield at 163855 pb^-1 is sum_event_weight * 163855.
+# Data uses unit weight, so sum_event_weight equals events.
+
+# EWK: 701000
+mc/mc23.vbszz0709.701000.DAOD_PHYSLITE.e8543_s4159_r15224_p7266_vbszz_default.root	12483	6.12802377267e-05
+mc/mc23.vbszz0709.701000.DAOD_PHYSLITE.e8543_s4162_r14622_p7266_vbszz_default.root	13215	6.86249084235e-05
+mc/mc23.vbszz0709.701000.DAOD_PHYSLITE.e8543_s4369_r16083_p7266_vbszz_default.root	22543	0.000249855487849
+# subtotal: files=3 events=48241 sum_event_weight=0.000379760633999 yield_at_163855=62.2256786839
+
+# QCD: 701040
+mc/mc23.vbszz0709.701040.DAOD_PHYSLITE.e8582_s4159_r15530_p7266_vbszz_default.root	405794	0.000454679864736
+mc/mc23.vbszz0709.701040.DAOD_PHYSLITE.e8582_s4162_r15540_p7266_vbszz_default.root	405228	0.000476519682873
+mc/mc23.vbszz0709.701040.DAOD_PHYSLITE.e8582_s4369_r16083_p7266_vbszz_default.root	866512	0.0019003021532
+# subtotal: files=3 events=1677534 sum_event_weight=0.00283150170081 yield_at_163855=463.955711187
+
+# ggZZ: 605999
+mc/mc23.vbszz0709.605999.DAOD_PHYSLITE.e8615_s4159_r15530_p7266_vbszz_default.root	31301	5.58800070126e-05
+mc/mc23.vbszz0709.605999.DAOD_PHYSLITE.e8615_s4162_r15540_p7266_vbszz_default.root	30717	5.89355533655e-05
+mc/mc23.vbszz0709.605999.DAOD_PHYSLITE.e8615_s4369_r16083_p7266_vbszz_default.root	109802	0.000235902913953
+# subtotal: files=3 events=171820 sum_event_weight=0.000350718474331 yield_at_163855=57.4669756116
+
+# Others: 545790-545794, 701020, 701236, 701238, 701240, 701241
+mc/mc23.vbszz0709.545790.DAOD_PHYSLITE.e8551_s4159_r15530_p7017_vbszz_default.root	12058	1.45213306143e-05
+mc/mc23.vbszz0709.545790.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root	12364	1.6376651963e-05
+mc/mc23.vbszz0709.545790.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root	24140	5.82761857976e-05
+mc/mc23.vbszz0709.545791.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root	15444	1.88192895908e-05
+mc/mc23.vbszz0709.545791.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root	15566	1.97346717773e-05
+mc/mc23.vbszz0709.545791.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root	31810	7.56973857901e-05
+mc/mc23.vbszz0709.545792.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root	4745	1.98600307142e-07
+mc/mc23.vbszz0709.545792.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root	4925	2.20570996643e-07
+mc/mc23.vbszz0709.545792.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root	9934	8.04710243515e-07
+mc/mc23.vbszz0709.545793.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root	8683	1.53518596658e-07
+mc/mc23.vbszz0709.545793.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root	8881	1.69930882031e-07
+mc/mc23.vbszz0709.545793.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root	16424	6.16731412726e-07
+mc/mc23.vbszz0709.545794.DAOD_PHYSLITE.e8551_s4159_r15530_p7266_vbszz_default.root	15752	2.53752436006e-07
+mc/mc23.vbszz0709.545794.DAOD_PHYSLITE.e8551_s4162_r15540_p7266_vbszz_default.root	16789	2.80113684599e-07
+mc/mc23.vbszz0709.545794.DAOD_PHYSLITE.e8551_s4369_r16083_p7266_vbszz_default.root	33246	1.01730360517e-06
+mc/mc23.vbszz0709.701020.DAOD_PHYSLITE.e8543_s4159_r15224_p7266_vbszz_default.root	173	2.84547749394e-06
+mc/mc23.vbszz0709.701020.DAOD_PHYSLITE.e8543_s4162_r14622_p7266_vbszz_default.root	187	3.72885380542e-06
+mc/mc23.vbszz0709.701020.DAOD_PHYSLITE.e8543_s4369_r16083_p7266_vbszz_default.root	694	1.65549449396e-05
+mc/mc23.vbszz0709.701236.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root	1196	3.463551765e-06
+mc/mc23.vbszz0709.701236.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root	1210	3.78734500012e-06
+mc/mc23.vbszz0709.701236.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root	4909	1.40715565467e-05
+mc/mc23.vbszz0709.701238.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root	4273	1.29036342915e-06
+mc/mc23.vbszz0709.701238.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root	4087	1.33807722379e-06
+mc/mc23.vbszz0709.701238.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root	15834	5.10536833258e-06
+mc/mc23.vbszz0709.701240.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root	5044	1.24992205704e-07
+mc/mc23.vbszz0709.701240.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root	4757	1.2655381303e-07
+mc/mc23.vbszz0709.701240.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root	20498	5.08004946604e-07
+mc/mc23.vbszz0709.701241.DAOD_PHYSLITE.e8585_s4159_r15530_p7266_vbszz_default.root	1398	2.09577792961e-07
+mc/mc23.vbszz0709.701241.DAOD_PHYSLITE.e8585_s4162_r15540_p7266_vbszz_default.root	1375	2.12108565737e-07
+mc/mc23.vbszz0709.701241.DAOD_PHYSLITE.e8585_s4369_r16083_p7266_vbszz_default.root	5728	8.35859710657e-07
+# subtotal: files=30 events=302124 sum_event_weight=0.000261343383269 yield_at_163855=42.8224200655
+
+# Fake/background Z+jets: 601189-601191
+fake/mc23.vbszzfake.601189.DAOD_PHYSLITE.e8514_s4159_r15530_p7266_vbszz_default.root	165	0.000220007057546
+fake/mc23.vbszzfake.601189.DAOD_PHYSLITE.e8514_s4162_r15540_p7266_vbszz_default.root	72	0.000249141189079
+fake/mc23.vbszzfake.601189.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root	157	0.00112516742204
+fake/mc23.vbszzfake.601190.DAOD_PHYSLITE.e8514_s4159_r15530_p7266_vbszz_default.root	352	0.000404734627591
+fake/mc23.vbszzfake.601190.DAOD_PHYSLITE.e8514_s4162_r15540_p7266_vbszz_default.root	244	0.000376243864016
+fake/mc23.vbszzfake.601190.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root	366	0.00158147167687
+fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4159_r15224_p7266_vbszz_default.root	1	-3.73323524825e-06
+fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4162_r14622_p7266_vbszz_default.root	0	0
+fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root	2	1.12935863369e-05
+# subtotal: files=9 events=1359 sum_event_weight=0.00396432618823 yield_at_163855=649.574667573
+
+# Fake/background ttbar: 601230
+fake/mc23.vbszzfake.601230.DAOD_PHYSLITE.e8514_s4159_r15530_p7266_vbszz_default.root	17477	0.00102895368546
+fake/mc23.vbszzfake.601230.DAOD_PHYSLITE.e8514_s4162_r15540_p7266_vbszz_default.root	3535	0.00111188202748
+fake/mc23.vbszzfake.601230.DAOD_PHYSLITE.e8514_s4369_r16083_p7266_vbszz_default.root	17546	0.00420723730249
+# subtotal: files=3 events=38558 sum_event_weight=0.00634807301543 yield_at_163855=1040.16350394
+
+# Fake/background: 701045
+fake/mc23.vbszzfake.701045.DAOD_PHYSLITE.e8582_s4159_r15530_p7266_vbszz_default.root	5192	2.31686429962e-05
+fake/mc23.vbszzfake.701045.DAOD_PHYSLITE.e8582_s4162_r15540_p7266_vbszz_default.root	5241	2.56112975049e-05
+fake/mc23.vbszzfake.701045.DAOD_PHYSLITE.e8582_s4369_r16083_p7266_vbszz_default.root	11387	0.000100557532533
+# subtotal: files=3 events=21820 sum_event_weight=0.000149337473034 yield_at_163855=24.469691644
+
+# Data 2022
+data/data22.vbszz0709.periodAllYear.DAOD_PHYSLITE.grp22_v01_p7019_vbszz_default.root	791	791
+# subtotal: files=1 events=791 sum_event_weight=791
+
+# Data 2023
+data/data23.vbszz0709.periodAllYear.DAOD_PHYSLITE.grp23_v01_p7019_vbszz_default.root	726	726
+# subtotal: files=1 events=726 sum_event_weight=726
+
+# Data 2024
+data/data24.vbszz0709.periodAllYear.DAOD_PHYSLITE.grp24_v01_p7019_vbszz_default.root	3176	3176
+# subtotal: files=1 events=3176 sum_event_weight=3176
+
+# MC total: files=39 events=2199719 sum_event_weight=0.00382332419241 yield_at_163855=626.470785548
+# Fake/background total: files=15 events=61737 sum_event_weight=0.0104617366767 yield_at_163855=1714.20786316
+# Data total: files=3 events=4693 sum_event_weight=4693
+# All files: files=57 events=2266149
+
+# Files with no Nominal tree (zero reconstructed events):
+# fake/mc23.vbszzfake.601191.DAOD_PHYSLITE.e8514_s4162_r14622_p7266_vbszz_default.root

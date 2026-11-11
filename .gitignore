@@ -1,15 +1,25 @@
-# ROOT data files, including names such as sample.root.1
+# data files
 *.root
 *.root.*
+*.dat
 
-# Compiled C++ and ROOT/ACLiC output
+# Documents and images
+*.tex
+*.png
+*.pdf
+
+# Compiled files
 *.o
 *.so
 *.a
 *.pcm
 *.d
-*_ACLiC_dict*
 
 # Python cache
 __pycache__/
 *.pyc
+
+#Any zip files
+*.gz
+*.lhe
+*.lhe.gz

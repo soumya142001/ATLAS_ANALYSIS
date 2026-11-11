@@ -1,0 +1,223 @@
+#include "TFile.h"
+#include "TH1.h"
+#include "TEfficiency.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "THStack.h"
+#include "TF1.h"
+#include "TString.h"
+#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <TH1D.h>
+
+using std::cout;
+using std::endl;
+
+/* ===================================
+
+This is the regular overlay script example for beginners.
+Author: Soumya Sarkar
+Usage : At the root prompt
+    [].x overlay.C
+
+This file is modified to work in Root6.
+
+The primary function in this file is overlay().
+
+   =================================== */
+
+
+
+// Declare all the other functions needed. See the function implementations for more
+// comments about what the functions do.
+void decorate(TH1F *h,const char* xtitle, const char* ytitle, const char* title,
+	      int linecolor, int linewidth, int markercolor, int markerstyle, int tofill);
+void decorate(TLegend *g, float textSize, TString legendheader);
+float get_nevents(TH1D *hst, float bin_lo, float bin_hi);
+float get_nevents_err(TH1D *hst, float bin_lo, float bin_hi);
+
+
+void overlay()
+{
+
+  //Declare number of files
+  const int nfile = 5;
+  int colors[5] = {kRed,kBlue,kGreen,kOrange+2,kViolet};
+  
+  //First declare the file names (just strings)
+  TString filename[5];
+  TString samplename[5];
+  
+  filename[0] = "/home/ss1584/ATLAS_ANALYSIS/TESTING/VBS_ZZjj_TT.root";
+  filename[1] = "/home/ss1584/ATLAS_ANALYSIS/TESTING/VBS_ZZjj_TL.root";
+  filename[2] = "/home/ss1584/ATLAS_ANALYSIS/TESTING/VBS_ZZjj_LL.root";
+  filename[3] = "/home/ss1584/ATLAS_ANALYSIS/TESTING/incl_ZZ_QCD.root";
+  filename[4] = "/home/ss1584/ATLAS_ANALYSIS/TESTING/VBS_incl_ZZjj.root";
+    
+  samplename[0] = "VBS_ZZjj_TT";
+  samplename[1] = "VBS_ZZjj_TL";
+  samplename[2] = "VBS_ZZjj_LL";
+  samplename[3] = "incl_ZZ_QCD";
+  samplename[4] = "VBS_incl_ZZjj";
+    
+  //Declare the name of the plot that you want to overlay
+  TString plotname = "_ATLAS_VBS_ZZ_test_M_jposjneg_cut0";
+
+
+  //Also give fancy name for the axis titles
+  TString xtitle = "M_{jj}"; // Can use latex-type commands
+                                               // in strings. For example
+                                               // "#mu^{1} p_{T}"
+  TString ytitle = "Probability"; // Or "Events"
+
+  //Now let us open the files
+  TFile *file[5];
+  for(int i=0;i<nfile;i++){
+    file[i] = new TFile(filename[i]);
+  }
+  
+  //Now open the respective histograms from the files
+  TH1F *h[5];
+
+  for(int i=0;i<nfile;i++){
+    h[i] = (TH1F*)file[i]->Get(plotname);
+  }
+
+  for( int i = 0; i < nfile; i++){
+    h[i]->Scale(1.0/h[i]->Integral());
+  }
+  //cout<<htt->Integral()<<endl;
+
+  //Decorate the histograms using function decorate 
+  // See function definition below for syntax
+  // See https://root.cern.ch/root/html/TColor.html for color names
+
+
+  //h1->Scale(1.0/h1->Integral());
+  //h2->Scale(1.0/h2->Integral());
+
+
+  //Now let us declare a canvas 
+  TCanvas *c1 = new TCanvas("c1","c1",800,600);
+  c1->SetTitle("");
+  // Now we define a legend
+  TLegend *lg = new TLegend(0.65,0.60,0.85,0.80,NULL,"NDC");
+  decorate(lg,0.02,""); // Decorated the legend using function below.
+  	
+  // Now to draw the histograms and the legend
+  //h1->GetPaintedGraph()->GetYaxis()->SetRangeUser(0,1);
+
+  //Adding a Textbox
+  /*TPaveText *pt = new TPaveText(-4.2,1.1,-1.7,1.45);
+  pt->AddText("#it{ATLAS} #bf{Simulation Preliminary}");
+  pt->AddText("#bf{#sqrt{s} = 14 TeV, HL-LHC}");
+  pt->AddText("#bf{ITk layout 03-00-00}");
+  pt->AddText("#bf{Single Muon p_{T} = 10 GeV}");
+  pt->SetFillStyle(0);
+  pt->SetBorderSize(0);
+  pt->SetTextAlign(12);
+  pt->SetTextSize(0.025);
+  pt->SetMargin(0.1);
+  */
+    
+  h[0]->Draw("HIST");
+  for(int i=0;i<nfile;i++){
+    h[i]->SetStats(0);
+    h[i]->SetLineColor(colors[i]);
+    h[i]->SetTitle("");
+    h[i]->Draw("HIST SAME"); //error and point
+    gPad->Update();
+    h[i]->GetYaxis()->SetRangeUser(0,0.06);
+    h[i]->GetXaxis()->SetRangeUser(0,1000);
+    decorate(h[i],xtitle,ytitle,"",colors[i],1,kGreen+2,20,0);
+    lg->AddEntry(h[i],samplename[i],"l");
+  }
+  lg->Draw();
+  //pt->Draw();
+
+  //Adding Text to the histograms
+  TLatex txt;
+  txt.SetNDC(true);
+  txt.SetTextFont(42);
+  txt.SetTextSize(0.03);
+  txt.DrawLatex(0.1,0.92,"#it{#bf{ATLAS Simulation: Work in Progress}}");
+
+  //decorate(h1,xtitle,ytitle,"",kRed,1,kGreen+2,20,0);
+  //decorate(h2,xtitle,ytitle,"",kGreen+2,1,kGreen+2,20,0);
+
+}
+
+/*
+This function decorates the histogram, by setting the titles of the X and Y axes,
+by setting the line and marker colors, the marker style, and by deciding whether
+to fill in the histogram with a color or not.
+ */
+void decorate(TH1F* h,const char* xtitle, const char* ytitle, const char* title,
+	      int linecolor, int linewidth, int markercolor, int markerstyle, int tofill) {
+
+  h->GetXaxis()->SetTitle(xtitle);
+  h->GetYaxis()->SetTitle(ytitle);
+  h->SetTitle("Efficiency vs truth Eta");
+  h->SetLineColor(linecolor); 
+  h->SetLineWidth(linewidth);
+  h->SetMarkerColor(markercolor);
+  h->SetMarkerStyle(markerstyle);
+  if(tofill==1) h->SetFillColor(markercolor);
+
+  h->SetMarkerSize(0.25);
+  h->SetTitle(title);
+}
+
+/*
+This function decorates the legend, by setting the textsize, and filling in the
+legend with a pure white color.
+ */
+void decorate(TLegend *g, float textSize, TString legendheader)
+{
+  g->SetTextSize(textSize);
+  g->SetFillStyle(1);
+  g->SetFillColor(10);
+  g->SetBorderSize(1);
+  g->SetLineColor(10);
+  //Usually legends should not have headers
+  //but if you want one, uncomment the next line.
+  //g->SetHeader(legendheader);
+}
+
+
+// Here are a couple of other utility functions
+
+// For a given histogram hst, return the number of entries between bin_lo and bin_hi
+float get_nevents(TH1D *hst, float bin_lo, float bin_hi)
+{
+  int bin_width = hst->GetBinWidth(1);
+  int ibin_begin = 1;
+  float nevents = 0;
+  while ( hst->GetBinCenter(ibin_begin) < bin_lo )
+    ibin_begin++;
+  int ibin_end = ibin_begin;
+  while ( hst->GetBinCenter(ibin_end) < bin_hi )
+    ibin_end++;
+  for(int i=ibin_begin; i<ibin_end; i++)
+    nevents += hst->GetBinContent(i);
+
+  return nevents;
+}
+// Partner function for above, returning the error for the above nevents
+float get_nevents_err(TH1D *hst, float bin_lo, float bin_hi)
+{
+  int bin_width = hst->GetBinWidth(1);
+  int ibin_begin = 1;
+  float nevents_err = 0;
+  while ( hst->GetBinCenter(ibin_begin) < bin_lo )
+    ibin_begin++;
+  int ibin_end = ibin_begin;
+  while ( hst->GetBinCenter(ibin_end) < bin_hi )
+    ibin_end++;
+  for(int i=ibin_begin; i<ibin_end; i++)
+    nevents_err += pow(hst->GetBinError(i),2);
+  nevents_err = sqrt(nevents_err);
+
+  return nevents_err;
+}

@@ -1,0 +1,76 @@
+- Region: 4 j, 2 b
+  Samples:
+    - Sample: "#it{t#bar{t}}H"
+      Yield: 0
+      Error: 0
+    - Sample: "#it{t#bar{t}} + jets"
+      Yield: 1571.787515000546
+      Error: 47.1568591761773
+    - Sample: "#it{W}/#it{Z} + jets"
+      Yield: 23.7816210162535
+      Error: 11.848594096415477
+    - Sample: Single Top
+      Yield: 104.21522765034561
+      Error: 13.819922508646515
+    - Sample: Total
+      Yield: 1699.784363667145
+      Error: 41.045756226320904
+    - Data: Data 2015
+      Yield: 1702
+- Region: 5 j, 3 b
+  Samples:
+    - Sample: "#it{t#bar{t}}H"
+      Yield: -1.5943913970484054
+      Error: 4.0622877162047475
+    - Sample: "#it{t#bar{t}} + jets"
+      Yield: 130.66217585309155
+      Error: 10.577204428525743
+    - Sample: "#it{W}/#it{Z} + jets"
+      Yield: 0
+      Error: 0
+    - Sample: Single Top
+      Yield: 5.2974347970118725
+      Error: 0.9101438458006619
+    - Sample: Total
+      Yield: 134.36521925305502
+      Error: 9.247559759733777
+    - Data: Data 2015
+      Yield: 132
+- Region: "#geq 6 j, #geq 4 b"
+  Samples:
+    - Sample: "#it{t#bar{t}}H"
+      Yield: -2.3847233121789273
+      Error: 6.110084535082812
+    - Sample: "#it{t#bar{t}} + jets"
+      Yield: 15.839632737316967
+      Error: 4.840682807044634
+    - Sample: "#it{W}/#it{Z} + jets"
+      Yield: 0
+      Error: 0
+    - Sample: Single Top
+      Yield: 0.38509514324810484
+      Error: 0.09498583238853593
+    - Sample: Total
+      Yield: 13.840004568386147
+      Error: 3.5596476347239383
+    - Data: Data 2015
+      Yield: 14
+- Region: 5 j, 3 b
+  Samples:
+    - Sample: "#it{t#bar{t}}H"
+      Yield: 0
+      Error: 0
+    - Sample: "#it{t#bar{t}} + jets"
+      Yield: 130.8993909900331
+      Error: 11.352388489987298
+    - Sample: "#it{W}/#it{Z} + jets"
+      Yield: 0
+      Error: 0
+    - Sample: Single Top
+      Yield: 5.299324329505005
+      Error: 0.9200015617831195
+    - Sample: Total
+      Yield: 136.1987153195381
+      Error: 11.630193937008631
+    - Data: Data 2015
+      Yield: 132

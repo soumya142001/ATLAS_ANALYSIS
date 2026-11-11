@@ -1,0 +1,390 @@
+#define MiniTree_Analyzer_cxx
+
+/********************************************************************
+Author: Soumya Sarkar
+Produced By: ROOT TSelector class (automatically)
+*********************************************************************/
+
+
+// The class definition in MiniTree_Analyzer.h has been generated automatically
+// by the ROOT utility TTree::MakeSelector(). This class is derived
+// from the ROOT class TSelector. For more information on the TSelector
+// framework see $ROOTSYS/README/README.SELECTOR or the ROOT User Manual.
+
+
+// The following methods are defined in this file:
+//    Begin():        called every time a loop on the tree starts,
+//                    a convenient place to create your histograms.
+//    SlaveBegin():   called after Begin(), when on PROOF called only on the
+//                    slave servers.
+//    Process():      called for each event, in this function you decide what
+//                    to read and fill your histograms.
+//    SlaveTerminate: called at the end of the loop on the tree, when on PROOF
+//                    called only on the slave servers.
+//    Terminate():    called at the end of the loop on the tree,
+//                    a convenient place to draw/fit your histograms.
+//
+// To use this file, try the following session on your Tree T:
+//
+// root> T->Process("MiniTree_Analyzer.C")
+// root> T->Process("MiniTree_Analyzer.C","some options")
+// root> T->Process("MiniTree_Analyzer.C+")
+//
+
+
+#include "MiniTree_Analyzer.h"
+#include <TH2.h>
+#include <TStyle.h>
+
+using namespace std;
+
+void MiniTree_Analyzer::Begin(TTree * /*tree*/)
+{
+   // The Begin() function is called at the start of the query.
+   // When running with PROOF Begin() is only called on the client.
+   // The tree argument is deprecated (on PROOF 0 is passed).
+
+   TString option = GetOption();
+}
+
+void MiniTree_Analyzer::SlaveBegin(TTree * /*tree*/)
+{
+   // The SlaveBegin() function is called after the Begin() function.
+   // When running with PROOF SlaveBegin() is called on each slave server.
+   // The tree argument is deprecated (on PROOF 0 is passed).
+
+  /************************************************************************
+             INITIALIZATION OF SEVERAL VARIABLES
+  ************************************************************************/
+
+  nevents = 0;
+  n_SR = 0;
+  n_CR = 0;
+  
+   TString option = GetOption();
+   _rootfile = new TFile(_rootfilename,"RECREATE");
+
+   //Creating Directories within the root file
+
+   _unfoldhist_dir = _rootfile->mkdir("Unfolding_InputHists");
+   _tree_dir       = _rootfile->mkdir("Tree");
+   _hist_dir       = _rootfile->mkdir("Histograms");
+
+   _hist_dir->cd();
+   BookHistograms();
+
+   _tree_dir->cd();
+   BookTTree();
+
+   _unfoldhist_dir->cd();
+   BookUnfoldHist();
+   
+}
+
+bool MiniTree_Analyzer::Process(Long64_t entry)
+{
+   // The Process() function is called for each entry in the tree (or possibly
+   // keyed object in the case of PROOF) to be processed. The entry argument
+   // specifies which entry in the currently loaded tree is to be processed.
+   // When processing keyed objects with PROOF, the object is already loaded
+   // and is available via the fObject pointer.
+   //
+   // This function should contain the \"body\" of the analysis. It can contain
+   // simple or elaborate selection criteria, run algorithms on the data
+   // of the event and typically fill histograms.
+   //
+   // The processing can be stopped by calling Abort().
+   //
+   // Use fStatus to set the return value of TTree::Process().
+   //
+   // The return value is currently not used.
+
+   fReader.SetLocalEntry(entry);
+   if(_data == 0)
+     fReader_MC.SetLocalEntry(entry);
+   else if(_data == 1)
+     fReader_Data.SetLocalEntry(entry);
+
+   /*****************************************************
+                   INITIALIZING COUNTERS
+   *****************************************************/
+
+   nevents++;
+   
+   /*******************************************************
+     Clearning the vectors belonging to particle Vectors
+   ********************************************************/
+   leptons.clear();
+   Z_candidates.clear();
+   ZZ_candidates.clear();
+   /*******************************************************
+       Clearning the vectors belonging for tree branches
+   ********************************************************/
+   _lepton_pT.clear();
+   _lepton_pdgid.clear();
+
+   //Leptons
+   unsigned int n_lep = lepton_pt.GetSize();
+   for(unsigned int i=0; i<n_lep; i++){
+     Particle temp;
+     temp.uid = i;
+     temp.flavor = lepton_flavor[i];
+     temp.v.SetPtEtaPhiE(lepton_pt[i]/1000,lepton_eta[i],lepton_phi[i],lepton_e[i]/1000); //Converting pT from MeV --> GeV
+     temp.charge = lepton_charge[i];
+     temp.z0sintheta = lepton_z0sinTheta[i];
+     temp.d0sig = lepton_d0sig[i];
+     if(temp.flavor == 0) temp.pdgid = temp.charge*(-11);
+     if(temp.flavor == 1) temp.pdgid = temp.charge*(-13);
+     bool pT_cut = lepton_pt[i]/1000 > 7;
+     bool eta_cut = ((fabs(lepton_eta[i]) < 2.47 && lepton_flavor[i] == 0) || (fabs(lepton_eta[i]) < 2.7 && lepton_flavor[i] == 1));
+     bool impact_cut = lepton_z0sinTheta[i] < 0.5;
+     
+     if(pT_cut && eta_cut && impact_cut) leptons.push_back(temp);
+   }
+
+   //Making the Z and ZZ candidates pair
+   
+   for(unsigned int i = 0; i < leptons.size(); i++){
+     for(unsigned int j = i+1; j < leptons.size(); j++){
+       Particle l1 = leptons.at(i);
+       Particle l2 = leptons.at(j);
+       //Checking the OSSF condition
+       if(isOSSF(l1,l2)) Z_candidates.emplace_back(std::pair(l1,l2));
+     }
+   }
+
+   for(unsigned int i = 0; i < Z_candidates.size(); i++){
+     for(unsigned int j = i+1; j < Z_candidates.size(); j++){
+       Zstate z1 = Z_candidates.at(i);
+       Zstate z2 = Z_candidates.at(j);
+       if(!shareLeptons(z1,z2)) ZZ_candidates.emplace_back(z1,z2);
+     }
+   }
+   
+   //Sorting the vectors
+   sortByProperty(leptons, [](const Particle& p){ return p.v.Pt(); });
+
+   //Sorting Z candidates by Mass
+
+   sortByProperty(Z_candidates, [](const Zstate& z){ return z.Zmass(); });
+
+
+   /**********************************************
+     Defining the Sizes of Particle arrays
+   ***********************************************/   
+   unsigned int nlep = leptons.size();
+   unsigned int njets = (*nj_good);
+   
+   /***************************************************************************
+           Filling the Unfolding Input Histograms, Histograms and TTree
+   *****************************************************************************/
+   
+   h["number_leptons"]->Fill(leptons.size());
+   _number_leptons = leptons.size();
+   for(unsigned int i=0; i < leptons.size(); i++){
+     double pT = leptons.at(i).v.Pt();
+     int pdgid = leptons.at(i).pdgid;
+     h["lepton_pT"]->Fill(pT);
+
+     /*************** TTree Branches *********************/
+     _lepton_pT.push_back(pT);
+     _lepton_pdgid.push_back(pdgid);     
+   }
+   
+   h["reco_pT_4l"]->Fill(*pT_llll);
+   
+   if(_data == 0){// Filling the truth info for MC only     
+     h["truth_pT4l"]->Fill(*truth_pT_llll);
+   }
+   
+      
+   /*********************************************************
+      Starting the VBS Analysis - Signal and Control Region
+   *********************************************************/
+
+   if( nlep >=4 && njets >=2 && ZZ_candidates.size() >= 1){
+
+     //Choosing the two Z candidates Z1 and Z2
+     double minMassdist = 100000;
+     unsigned int min_ind = 0;
+     for(unsigned int i = 0; i < ZZ_candidates.size(); i++){
+       Zstate z1 = ZZ_candidates.at(i).first;
+       Zstate z2 = ZZ_candidates.at(i).second;
+       
+       double tempmin = z1.Zdist()+z2.Zdist();
+       if(tempmin < minMassdist){
+	 minMassdist = tempmin;
+	 min_ind = i;
+       } 
+     }
+
+     Zstate Z1 = ZZ_candidates.at(min_ind).first;
+     Zstate Z2 = ZZ_candidates.at(min_ind).second;
+     
+     //Swapping Z1 and Z2 by their mass ordering
+     
+     if( Z2.Zdist() < Z1.Zdist()){
+       Zstate temp = Z2;
+       Z2 = Z1;
+       Z1 = temp;
+     }
+     
+     
+     //Defining the properties of objects
+     const double pT0_lep = leptons.at(0).v.Pt();
+     const double pT1_lep = leptons.at(1).v.Pt();
+     const double pT2_lep = leptons.at(2).v.Pt();
+     const double pT3_lep = leptons.at(3).v.Pt();
+     const double eta0_lep = leptons.at(0).v.Eta();
+     const double eta1_lep = leptons.at(1).v.Eta();
+     const double eta2_lep = leptons.at(2).v.Eta();
+     const double eta3_lep = leptons.at(3).v.Eta();
+     const double pid0_lep = fabs(leptons.at(0).pdgid);
+     const double pid1_lep = fabs(leptons.at(1).pdgid);
+     const double pid2_lep = fabs(leptons.at(2).pdgid);
+     const double pid3_lep = fabs(leptons.at(3).pdgid);
+
+     const double deltaR_01 = leptons.at(0).v.DeltaR(leptons.at(1).v);
+     const double deltaR_02 = leptons.at(0).v.DeltaR(leptons.at(2).v);
+     const double deltaR_03 = leptons.at(0).v.DeltaR(leptons.at(3).v);
+     const double deltaR_12 = leptons.at(1).v.DeltaR(leptons.at(2).v);
+     const double deltaR_13 = leptons.at(1).v.DeltaR(leptons.at(3).v);
+     const double deltaR_23 = leptons.at(2).v.DeltaR(leptons.at(3).v);
+
+     const double deltaRmin = std::min({deltaR_01,deltaR_02,deltaR_03,deltaR_12,deltaR_13,deltaR_23});	
+     
+     const double pTj1 = (*tagjet1_pt);
+     const double pTj2 = (*tagjet2_pt);
+     const double etaj1 = (*tagjet1_eta);
+     const double etaj2 = (*tagjet2_eta);
+     const double yj1 = (*tagjet1_y);
+     const double yj2 = (*tagjet2_y);
+     const double phij1 = (*tagjet1_phi);
+     const double phij2 = (*tagjet2_phi);
+
+     const double M_jj       = (*mjj);
+     const double y_j1j2     = (*yj1_yj2);
+     const double delta_yjj  = (*delta_y_jj);
+
+     //CUT0 = No cuts except the object selection cut
+
+     const bool  cut0 = true;
+     
+     //CUT1
+     
+     const bool pT_cut1 = pT0_lep > 20 && pT1_lep > 20 && pT2_lep > 10; 
+     const bool dR_cut1 = deltaRmin > 0.2;     
+     const bool cut1 = pT_cut1 && dR_cut1;
+     
+     
+     //CUT 2
+     const bool Zmass_cut = ( Z1.Zmass() > 66 && Z1.Zmass() < 116 ) && ( Z2.Zmass() > 66 && Z2.Zmass() < 116); 
+     const bool SFOS_cut = Z_candidates.at(Z_candidates.size() - 1).Zmass() > 10; // each M(l+,l-) > 10 GeV mass cut, since the Z_candidates are already sorted, just min works
+     const bool cut2 = cut1 && Zmass_cut && SFOS_cut;
+     
+     //CUT 3
+     const bool j1_cut = (pTj1 > 30 && fabs(etaj1) < 2.4 ) || (pTj1 > 40 && fabs(etaj1) > 2.4 && fabs(etaj1) < 4.5 );
+     const bool j2_cut = (pTj2 > 30 && fabs(etaj2) < 2.4 ) || (pTj2 > 40 && fabs(etaj2) > 2.4 && fabs(etaj2) < 4.5 );
+     const bool jjcut      = (fabs(delta_yjj) > 2  &&  M_jj > 300); 
+     const bool cut3       = cut2 && j1_cut && j2_cut && y_j1j2 < 0 && jjcut;  
+
+     /*****************************************************
+         Defining Signal and Control Region
+     *****************************************************/
+     bool SR = cut3;
+     bool CR = cut2 && j1_cut && j2_cut && (y_j1j2 < 0) && (fabs(delta_yjj) > 2 || M_jj < 300);
+     
+     if(SR){       
+       n_SR++;
+       
+       h["M_jj_SR"]->Fill(M_jj);
+     }
+     
+     if(CR){
+       n_CR++;
+       
+      h["M_jj_CR"]->Fill(M_jj);
+     }
+
+
+   }
+   
+   
+   
+   _tree->Fill();
+      
+   return true;
+}
+
+void MiniTree_Analyzer::BookHistograms()
+{
+  h["number_leptons"]     = new TH1D("number_leptons", "number_leptons", 10,0,10);
+  h["lepton_pT"]          = new TH1D("lepton_pT",       "lepton_pT",    1000,0,1000);
+  h["lepton_eta"]         = new TH1D("lepton_eta",      "lepton_eta",   2000,-10,10);
+  h["lepton_phi"]         = new TH1D("lepton_phi",      "lepton_phi",   2000,-10,10);
+
+  //CUT-FLOW level Histograms (SR and CR)
+
+  //SR
+  h["M_jj_SR"] =  new TH1D("M_jj_SR", "di-jet Invariant Mass SR", 1000,0,5000);
+
+  //CR
+  h["M_jj_CR"] =  new TH1D("M_jj_CR", "di-jet Invariant Mass CR", 1000,0,5000);
+  
+}
+
+void MiniTree_Analyzer::BookUnfoldHist()
+{
+  h["truth_pT4l"]     = new TH1D("truth_pT4l", "truth_pT4l", 10,0,10);
+  h["reco_pT_4l"]     = new TH1D("reco_pT4l",  "reco_pT4l",  10,0,10);
+}
+
+
+void MiniTree_Analyzer::BookTTree()
+{
+  //Tree maker to even further select derived branches
+  _tree = new TTree("Events","Events");
+  
+  //Defining the branches of the _tree
+  
+  _tree->Branch("number_leptons",              &_number_leptons   );
+  _tree->Branch("lepton_pT",                   &_lepton_pT        );
+  _tree->Branch("lepton_pdgid",                &_lepton_pdgid     );
+  
+}
+
+void MiniTree_Analyzer::SlaveTerminate()
+{
+   // The SlaveTerminate() function is called after all entries or objects
+   // have been processed. When running with PROOF SlaveTerminate() is called
+   // on each slave server.
+
+  _rootfile->cd();
+  _rootfile->Write();
+  _rootfile->Close();
+
+  //Extracting the scale factor normalised to luminosity
+
+  double lumi_sample = nevents/_xs;
+  double lumi_target = 140; //fb^{-1}
+  double sf = lumi_target/lumi_sample;
+  cout<<_xs<<endl;
+  //Writing the summary file
+  fstream file(_sumfilename, ios::out);
+
+  file<<"Total Number of Events ran     = "<<nevents<<endl;
+  file<<"Total Number of Events in SR   = "<<n_SR<<endl;
+  file<<"Total Number of Events in CR   = "<<n_CR<<endl;
+  file<<"Total Number of Events in SR (Normalized to Luminosity = 140 fb^(-1))   = "<<sf*n_SR<<endl;
+  file<<"Total Number of Events in CR (Normalized to Luminosity = 140 fb^(-1))  = "<<sf*n_CR<<endl;
+  
+  file.close();
+}
+
+void MiniTree_Analyzer::Terminate()
+{
+   // The Terminate() function is the last function to be called during
+   // a query. It always runs on the client, it can be used to present
+   // the results graphically or save the results to file.
+
+}

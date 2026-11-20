@@ -1,0 +1,13 @@
+Total Number of Events ran     = 325743
+Total Number of Events in SR   = 38960
+Total Number of Events in CR   = 72253
+Total Number of Events in Lumi Scaled SR   = 26.8615
+Total Number of Events in Lumi Scaled CR   = 49.8158
+Total Number of Events in SR        = 10.7605
+Total Number of Events in CR        = 19.5578
+Total Number of Events in SR_def    = 12.2949
+Total Number of Events in CR_def    = 19.403
+Total Event Weight:  0.000544696
+Avg Event Weight/ event:  1.67216e-09
+Lumi Sample:   203056
+Lumi Sample/event:   0.623364

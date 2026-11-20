@@ -42,16 +42,16 @@ void histo_stack()
 {
 
   //Defining the Parameters of the Plot
-  double XMIN = -4.5;
-  double XMAX = 4.5;
+  double XMIN = 300;
+  double XMAX = 3000;
   double YMIN = 0;
-  double YMAX = 40;
-  TString REGION = "QCDCR";
-  double binwidth = 0.3;
-  TString variable = "Y_Z2";
+  double YMAX = 70;
+  TString REGION = "SR";
+  double binwidth = 100;
+  TString variable = "M_jj";
   
-  TString xtitle = "Y_{Z2}";
-  TString ytitle = "Events /  0.3 "; 
+  TString xtitle = "M_jj";
+  TString ytitle = "Events /  100 GeV "; 
   
   //Declare the name of the plot that you want to overlay
   TString plotname;
@@ -68,10 +68,12 @@ void histo_stack()
   //First declare the file names (just strings)
   TString filename[nfile];
   TString samplename[nfile];
+  TString datafilename;
 
   filename[0] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/EWK_ZZjj.root";
   filename[1] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/gg4l_M4l_70_3000.root";
   filename[2] = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/ZZ_QCD.root";
+  datafilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/data.root";
   
   samplename[0] = "VBS_EW_ZZjj";
   samplename[1] = "ggllll_M4l130";
@@ -82,7 +84,9 @@ void histo_stack()
   for(int i=0;i<nfile;i++){
     file[i] = new TFile(filename[i]);
   }
-  
+
+  TFile *data = new TFile(datafilename);
+
   //Now open the respective histograms from the files
   TH1F *h[nfile];
 
@@ -92,7 +96,10 @@ void histo_stack()
     int nrebins = static_cast<int>(binwidth/binw);
     h[i]->Rebin(nrebins);
   }
-
+  
+  TH1F *h_data;
+  h_data = (TH1F*)data->Get(plotname);   
+    
   //Defining an Error histogram
 
   TH1F *herr = (TH1F*)h[0]->Clone("herr");
@@ -209,7 +216,7 @@ void histo_stack()
   txt.SetTextFont(42);
   txt.SetTextSize(0.03);
   txt.DrawLatex(0.13,0.84,
-		Form("#splitline{#it{#bf{ATLAS Simulation: Work in Progress}}}{#splitline{#sqrt{s} = 13.6 TeV, 140 fb^{-1}}{#bf{%s}}}", REGION.Data())
+		Form("#splitline{#it{#bf{ATLAS Simulation: Work in Progress}}}{#splitline{#sqrt{s} = 13.6 TeV, 164 fb^{-1}}{#bf{%s}}}", REGION.Data())
 		);
 
   c1->SaveAs("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/PLOTS/STACKPLOTS/"+ variable + REGION + ".png");

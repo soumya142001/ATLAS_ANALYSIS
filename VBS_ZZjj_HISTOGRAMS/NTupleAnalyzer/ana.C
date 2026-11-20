@@ -36,7 +36,7 @@ void ana(TString sample = "incl_ZZjj_TT"){
   
   if(sample=="ZZjjEW_TT"){
     //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/merged/mc23_13p6TeV.546887.merged.root");
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/*.546887.*.root");
     rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
@@ -45,7 +45,7 @@ void ana(TString sample = "incl_ZZjj_TT"){
 
   if(sample=="ZZjjEW_TL"){
     //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/merged/mc23_13p6TeV.546888.merged.root");
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/*.546888.*.root");
     rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
@@ -54,7 +54,7 @@ void ana(TString sample = "incl_ZZjj_TT"){
   
   if(sample=="ZZjjEW_LL"){
     //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/merged/mc23_13p6TeV.546889.merged.root");
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/EWK_polar/*.546889.*.root");
     rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
@@ -63,7 +63,7 @@ void ana(TString sample = "incl_ZZjj_TT"){
 
     if(sample=="incl_ZZjj_TT"){
     //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/merged/mc23_13p6TeV.546884.*.root");
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/*.546884.*.root");
     rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
@@ -72,7 +72,7 @@ void ana(TString sample = "incl_ZZjj_TT"){
 
   if(sample=="incl_ZZjj_TL"){
     //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/merged/mc23_13p6TeV.546885.merged.root");
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/*.546885.*.root");
     rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
@@ -81,21 +81,13 @@ void ana(TString sample = "incl_ZZjj_TT"){
   
   if(sample=="incl_ZZjj_LL"){
     //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/merged/mc23_13p6TeV.546886.merged.root");
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/*.546886.*.root");
     rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
     xs = xs_inclZZjj_LL;
   }
   
-  if(sample=="incl_ZZjj_LL"){
-    //Add one file to chain. This is the input file.
-    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/QCD_polar/merged/mc23_13p6TeV.546886.merged.root");
-    rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
-    sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
-    data = 0; //data = 1, MC = 0
-    xs = xs_inclZZjj_LL;
-  }
 
   if(sample=="ZZ_QCD"){
     //Add one file to chain. This is the input file.
@@ -122,6 +114,15 @@ void ana(TString sample = "incl_ZZjj_TT"){
     sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
     data = 0; //data = 1, MC = 0
     xs = xs_gg4l_M4l_70_3000;
+  }
+  
+  if(sample=="data"){
+    //Add one file to chain. This is the input file.
+    chain->Add("/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/ROOTFILES/minitree_linnuo/reco_wp85/data/*.root");
+    rootfilename = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_ROOTFILES/"+ sample + ".root";
+    sumfilename  = "/home/ss1584/ATLAS_ANALYSIS/VBS_ZZjj_HISTOGRAMS/NTupleAnalyzer/OUTPUT_SUMMARYFILES/"+ sample +".txt";
+    data = 1; //data = 1, MC = 0
+    xs = 1;
   }
     
   //Finally running the process

@@ -1,0 +1,5 @@
+Total Number of Events ran     = 445048
+Total Number of Events in SR   = 246934
+Total Number of Events in CR   = 37763
+Total Number of Events in SR (Normalized to Luminosity = 140 fb^(-1))   = 6.23649
+Total Number of Events in CR (Normalized to Luminosity = 140 fb^(-1))  = 0.946035

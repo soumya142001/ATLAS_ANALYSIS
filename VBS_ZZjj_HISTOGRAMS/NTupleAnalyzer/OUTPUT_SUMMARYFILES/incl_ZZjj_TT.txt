@@ -1,5 +1,13 @@
-Total Number of Events ran     = 404383
-Total Number of Events in SR   = 218097
-Total Number of Events in CR   = 242737
-Total Number of Events in SR (Normalized to Luminosity = 140 fb^(-1))   = 261.23
-Total Number of Events in CR (Normalized to Luminosity = 140 fb^(-1))  = 290.743
+Total Number of Events ran     = 572907
+Total Number of Events in SR   = 66560
+Total Number of Events in CR   = 128044
+Total Number of Events in Lumi Scaled SR   = 56.2724
+Total Number of Events in Lumi Scaled CR   = 108.253
+Total Number of Events in SR        = 23.0882
+Total Number of Events in CR        = 42.6954
+Total Number of Events in SR_def    = 26.2874
+Total Number of Events in CR_def    = 42.0921
+Total Event Weight:  0.00119098
+Avg Event Weight/ event:  2.07884e-09
+Lumi Sample:   165594
+Lumi Sample/event:   0.289042

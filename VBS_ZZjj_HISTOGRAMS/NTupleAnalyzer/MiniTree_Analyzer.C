@@ -20,7 +20,7 @@ Produced By: ROOT TSelector class (automatically)
 //    Process():      called for each event, in this function you decide what
 //                    to read and fill your histograms.
 //    SlaveTerminate: called at the end of the loop on the tree, when on PROOF
-//                    called only on the slave servers.
+//                    called only on the slave servers.`
 //    Terminate():    called at the end of the loop on the tree,
 //                    a convenient place to draw/fit your histograms.
 //
@@ -30,6 +30,7 @@ Produced By: ROOT TSelector class (automatically)
 // root> T->Process("MiniTree_Analyzer.C","some options")
 // root> T->Process("MiniTree_Analyzer.C+")
 //
+
 
 
 #include "MiniTree_Analyzer.h"
@@ -60,6 +61,15 @@ void MiniTree_Analyzer::SlaveBegin(TTree * /*tree*/)
   nevents = 0;
   n_SR = 0;
   n_CR = 0;
+  sum_of_weight = 0;
+  sum_of_weight_SR = 0;
+  sum_of_weight_CR = 0;
+  n_SR_def = 0;
+  n_CR_def = 0;
+  sum_of_weight_SR_def = 0;
+  sum_of_weight_CR_def = 0;
+  weight = 0;
+
   
    TString option = GetOption();
    _rootfile = new TFile(_rootfilename,"RECREATE");
@@ -110,11 +120,19 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
    *****************************************************/
 
    nevents++;
-   
+   sum_of_weight += (*EventWeight);  
+   if(_data == 0) weight = (*EventWeight)*163855; //MC
+   if(_data == 1) weight = 1; // Data
+ 
+     
    /*******************************************************
      Clearning the vectors belonging to particle Vectors
    ********************************************************/
+   Jet1 = {0};
+   Jet2 = {0};
+   
    leptons.clear();
+   leptons_ZZ.clear();
    Z_candidates.clear();
    ZZ_candidates.clear();
    /*******************************************************
@@ -133,11 +151,11 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
      temp.charge = lepton_charge[i];
      temp.z0sintheta = lepton_z0sinTheta[i];
      temp.d0sig = lepton_d0sig[i];
-     if(temp.flavor == 0) temp.pdgid = temp.charge*(-11);
-     if(temp.flavor == 1) temp.pdgid = temp.charge*(-13);
+     if(temp.flavor == 0) temp.pdgid = lepton_charge[i]*(-11);
+     if(temp.flavor == 1) temp.pdgid = lepton_charge[i]*(-13);
      bool pT_cut = lepton_pt[i]/1000 > 7;
      bool eta_cut = ((fabs(lepton_eta[i]) < 2.47 && lepton_flavor[i] == 0) || (fabs(lepton_eta[i]) < 2.7 && lepton_flavor[i] == 1));
-     bool impact_cut = lepton_z0sinTheta[i] < 0.5;
+     bool impact_cut = lepton_z0sinTheta[i] < 0.5 && ((lepton_flavor[i] == 0 && lepton_d0sig[i] < 5) || (lepton_flavor[i] == 1 && lepton_d0sig[i] < 3));
      
      if(pT_cut && eta_cut && impact_cut) leptons.push_back(temp);
    }
@@ -163,7 +181,7 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
    
    //Sorting the vectors
    sortByProperty(leptons, [](const Particle& p){ return p.v.Pt(); });
-
+     
    //Sorting Z candidates by Mass
 
    sortByProperty(Z_candidates, [](const Zstate& z){ return z.Zmass(); });
@@ -198,15 +216,16 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
    }
    
       
-   /*********************************************************
-      Starting the VBS Analysis - Signal and Control Region
-   *********************************************************/
+   /************************************************************************************************************************
+      Starting the VBS Analysis - Signal and Control Region ( SR and CR based on definition from Run-2 VBS ZZ analysis.)
+      SR_def and CR_def based on recommended cuts for Run 3
+   ***************************************************************************************************************************/
 
    if( nlep >=4 && njets >=2 && ZZ_candidates.size() >= 1){
 
      //Choosing the two Z candidates Z1 and Z2
      double minMassdist = 100000;
-     unsigned int min_ind = 0;
+     unsigned int min_ind = -1;
      for(unsigned int i = 0; i < ZZ_candidates.size(); i++){
        Zstate z1 = ZZ_candidates.at(i).first;
        Zstate z2 = ZZ_candidates.at(i).second;
@@ -228,30 +247,46 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
        Z2 = Z1;
        Z1 = temp;
      }
+
+     leptons_ZZ.push_back(Z1.first);
+     leptons_ZZ.push_back(Z1.second);
+     leptons_ZZ.push_back(Z2.first);
+     leptons_ZZ.push_back(Z2.second);
      
+     //Sorting the vectors
+     sortByProperty(leptons_ZZ, [](const Particle& p){ return p.v.Pt(); });
      
      //Defining the properties of objects
-     const double pT0_lep = leptons.at(0).v.Pt();
-     const double pT1_lep = leptons.at(1).v.Pt();
-     const double pT2_lep = leptons.at(2).v.Pt();
-     const double pT3_lep = leptons.at(3).v.Pt();
-     const double eta0_lep = leptons.at(0).v.Eta();
-     const double eta1_lep = leptons.at(1).v.Eta();
-     const double eta2_lep = leptons.at(2).v.Eta();
-     const double eta3_lep = leptons.at(3).v.Eta();
-     const double pid0_lep = fabs(leptons.at(0).pdgid);
-     const double pid1_lep = fabs(leptons.at(1).pdgid);
-     const double pid2_lep = fabs(leptons.at(2).pdgid);
-     const double pid3_lep = fabs(leptons.at(3).pdgid);
+     const double pT0_lep = leptons_ZZ.at(0).v.Pt();
+     const double pT1_lep = leptons_ZZ.at(1).v.Pt();
+     const double pT2_lep = leptons_ZZ.at(2).v.Pt();
+     const double pT3_lep = leptons_ZZ.at(3).v.Pt();
+     const double eta0_lep = leptons_ZZ.at(0).v.Eta();
+     const double eta1_lep = leptons_ZZ.at(1).v.Eta();
+     const double eta2_lep = leptons_ZZ.at(2).v.Eta();
+     const double eta3_lep = leptons_ZZ.at(3).v.Eta();
+     const double pid0_lep = fabs(leptons_ZZ.at(0).pdgid);
+     const double pid1_lep = fabs(leptons_ZZ.at(1).pdgid);
+     const double pid2_lep = fabs(leptons_ZZ.at(2).pdgid);
+     const double pid3_lep = fabs(leptons_ZZ.at(3).pdgid);
 
-     const double deltaR_01 = leptons.at(0).v.DeltaR(leptons.at(1).v);
-     const double deltaR_02 = leptons.at(0).v.DeltaR(leptons.at(2).v);
-     const double deltaR_03 = leptons.at(0).v.DeltaR(leptons.at(3).v);
-     const double deltaR_12 = leptons.at(1).v.DeltaR(leptons.at(2).v);
-     const double deltaR_13 = leptons.at(1).v.DeltaR(leptons.at(3).v);
-     const double deltaR_23 = leptons.at(2).v.DeltaR(leptons.at(3).v);
+     const double deltaR_01 = leptons_ZZ.at(0).v.DeltaR(leptons_ZZ.at(1).v);
+     const double deltaR_02 = leptons_ZZ.at(0).v.DeltaR(leptons_ZZ.at(2).v);
+     const double deltaR_03 = leptons_ZZ.at(0).v.DeltaR(leptons_ZZ.at(3).v);
+     const double deltaR_12 = leptons_ZZ.at(1).v.DeltaR(leptons_ZZ.at(2).v);
+     const double deltaR_13 = leptons_ZZ.at(1).v.DeltaR(leptons_ZZ.at(3).v);
+     const double deltaR_23 = leptons_ZZ.at(2).v.DeltaR(leptons_ZZ.at(3).v);
+
+     const double M_12 = (leptons_ZZ[0].v+leptons_ZZ[1].v).M();
+     const double M_34 = (leptons_ZZ[2].v+leptons_ZZ[3].v).M();
+     const double M_14 = (leptons_ZZ[0].v+leptons_ZZ[3].v).M();
+     const double M_23 = (leptons_ZZ[1].v+leptons_ZZ[2].v).M();
 
      const double deltaRmin = std::min({deltaR_01,deltaR_02,deltaR_03,deltaR_12,deltaR_13,deltaR_23});	
+     const double min_Mll = std::min({M_12,M_34,M_14,M_23});	
+
+     Jet1.v.SetPtEtaPhiM(*tagjet1_pt,*tagjet1_eta,*tagjet1_phi,*tagjet1_m);
+     Jet2.v.SetPtEtaPhiM(*tagjet2_pt,*tagjet2_eta,*tagjet2_phi,*tagjet2_m);
      
      const double pTj1 = (*tagjet1_pt);
      const double pTj2 = (*tagjet2_pt);
@@ -261,15 +296,24 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
      const double yj2 = (*tagjet2_y);
      const double phij1 = (*tagjet1_phi);
      const double phij2 = (*tagjet2_phi);
+     const double jvt  = (*jvtweight);
 
-     const double M_jj       = (*mjj);
-     const double y_j1j2     = (*yj1_yj2);
-     const double delta_yjj  = (*delta_y_jj);
+     const double M_jj       = (Jet1.v+Jet2.v).M();
+     const double y_j1j2     = (Jet1.v.Rapidity()*Jet2.v.Rapidity());
+     const double delta_yjj  = (Jet1.v.Rapidity()-Jet2.v.Rapidity());
 
+     const double M_ZZ  = (Z1.mom()+Z2.mom()).M();
+     const double pT_ZZ = (Z1.mom()+Z2.mom()).Pt();
+     const double pT_Z1 = Z1.mom().Pt();
+     const double Y_Z1  = Z1.mom().Rapidity();
+     const double Y_Z2  = Z2.mom().Rapidity();
+     const double pT_ZZjj = (Z1.mom() + Z2.mom() + Jet1.v+Jet2.v).Pt();
+     const double HT_ZZjj = Z1.mom().Pt()+Z2.mom().Pt()+Jet1.v.Pt()+Jet2.v.Pt();
+     
      //CUT0 = No cuts except the object selection cut
 
      const bool  cut0 = true;
-     
+
      //CUT1
      
      const bool pT_cut1 = pT0_lep > 20 && pT1_lep > 20 && pT2_lep > 10; 
@@ -279,37 +323,75 @@ bool MiniTree_Analyzer::Process(Long64_t entry)
      
      //CUT 2
      const bool Zmass_cut = ( Z1.Zmass() > 66 && Z1.Zmass() < 116 ) && ( Z2.Zmass() > 66 && Z2.Zmass() < 116); 
-     const bool SFOS_cut = Z_candidates.at(Z_candidates.size() - 1).Zmass() > 10; // each M(l+,l-) > 10 GeV mass cut, since the Z_candidates are already sorted, just min works
+     const bool SFOS_cut = min_Mll > 10; // each M(l+,l-) > 10 GeV mass cut, since the Z_candidates are already sorted, just min works
      const bool cut2 = cut1 && Zmass_cut && SFOS_cut;
      
      //CUT 3
-     const bool j1_cut = (pTj1 > 30 && fabs(etaj1) < 2.4 ) || (pTj1 > 40 && fabs(etaj1) > 2.4 && fabs(etaj1) < 4.5 );
-     const bool j2_cut = (pTj2 > 30 && fabs(etaj2) < 2.4 ) || (pTj2 > 40 && fabs(etaj2) > 2.4 && fabs(etaj2) < 4.5 );
-     const bool jjcut      = (fabs(delta_yjj) > 2  &&  M_jj > 300); 
-     const bool cut3       = cut2 && j1_cut && j2_cut && y_j1j2 < 0 && jjcut;  
+     const bool j1_cut = (pTj1 > 30.0 && fabs(etaj1) < 2.4 ) || (pTj1 > 40.0 && fabs(etaj1) > 2.4 && fabs(etaj1) < 4.5 );
+     const bool j2_cut = (pTj2 > 30.0 && fabs(etaj2) < 2.4 ) || (pTj2 > 40.0 && fabs(etaj2) > 2.4 && fabs(etaj2) < 4.5 );
+     const bool jjcut      = (fabs(delta_yjj) > 2.0)  &&  (M_jj > 300.0); 
+     const bool cut3       = cut2 && j1_cut && j2_cut && (y_j1j2 < 0) && jjcut && (jvt > 0.59);  
 
      /*****************************************************
          Defining Signal and Control Region
      *****************************************************/
      bool SR = cut3;
-     bool CR = cut2 && j1_cut && j2_cut && (y_j1j2 < 0) && (fabs(delta_yjj) > 2 || M_jj < 300);
+     bool CR = cut2 && j1_cut && j2_cut && (y_j1j2 < 0) && (jvt > 0.59) && (fabs(delta_yjj) < 2 || M_jj < 300);
+
+     if(cut0){
+       h["num_Zcandidates"]->Fill(Z_candidates.size());
+       h["num_ZZcandidates"]->Fill(Z_candidates.size());
+     }
      
-     if(SR){       
+     
+     
+     if(SR && _data == 0){       
        n_SR++;
-       
-       h["M_jj_SR"]->Fill(M_jj);
+       sum_of_weight_SR += *EventWeight;
+       h["M_jj_SR"]->Fill(M_jj,weight);
+       h["M_ZZ_SR"]->Fill(M_ZZ,weight);
+       h["delta_yjj_SR"]->Fill(delta_yjj,weight);
+       h["pT_ZZ_SR"]->Fill(pT_ZZ,weight);
      }
      
      if(CR){
        n_CR++;
-       
-      h["M_jj_CR"]->Fill(M_jj);
+       sum_of_weight_CR += *EventWeight;	    
+       h["M_jj_CR"]->Fill(M_jj,weight);
+       h["M_ZZ_CR"]->Fill(M_ZZ,weight);
+       h["delta_yjj_CR"]->Fill(delta_yjj,weight);
+       h["pT_ZZ_CR"]->Fill(pT_ZZ,weight);
+
      }
-
-
+     
+     bool common = (*has_dijet) && (*yj1_yj2 < 0.0) && (*passTriggers) && (*pT_1lep > 20.0) && (*pT_2lep > 20.0) && (*m_ll_12 > 5.0) && (*m_ll_34 > 5.0) && (*min_dR_4l > 0.05) && (*nsignalLep == 4);
+     bool SR_def = common && (fabs(*delta_y_jj) > 2.0) && (*mjj > 300.0);
+     bool CR_def = common && ((*mjj < 300) || (fabs(*delta_y_jj) < 2.0));
+     
+   if(SR_def && _data == 0){
+     n_SR_def++;
+     sum_of_weight_SR_def += *EventWeight;
+     
+     //Histograms
+     h["M_jj_SR_def"]->Fill(M_jj,weight);
+     h["M_ZZ_SR_def"]->Fill(M_ZZ,weight);
+     h["delta_yjj_SR_def"]->Fill(delta_yjj,weight);
+     h["pT_ZZ_SR_def"]->Fill(pT_ZZ,weight);
+     
+   }
+   if(CR_def){
+     n_CR_def++;
+     sum_of_weight_CR_def += *EventWeight;
+     
+     //Histograms
+     h["M_jj_CR_def"]->Fill(M_jj,weight);
+     h["M_ZZ_CR_def"]->Fill(M_ZZ,weight);
+     h["delta_yjj_CR_def"]->Fill(delta_yjj,weight);
+     h["pT_ZZ_CR_def"]->Fill(pT_ZZ,weight);
    }
    
    
+   }
    
    _tree->Fill();
       
@@ -323,13 +405,39 @@ void MiniTree_Analyzer::BookHistograms()
   h["lepton_eta"]         = new TH1D("lepton_eta",      "lepton_eta",   2000,-10,10);
   h["lepton_phi"]         = new TH1D("lepton_phi",      "lepton_phi",   2000,-10,10);
 
-  //CUT-FLOW level Histograms (SR and CR)
+  //CUT-FLOW level Histograms (SR and CR and SR_def and CR_def)
+
+  //CUT0
+  h["num_Zcandidates"]      =  new TH1D("num_Zcandidates", "num_Zcandidates", 10, 0 , 10);
+  h["num_ZZcandidates"]     =  new TH1D("num_ZZcandidates", "num_ZZcandidates", 10, 0 , 10);
 
   //SR
-  h["M_jj_SR"] =  new TH1D("M_jj_SR", "di-jet Invariant Mass SR", 1000,0,5000);
-
+  h["M_jj_SR"]              =  new TH1D("M_jj_SR","di-jet Invariant Mass ",             1000,0,5000);
+  h["M_ZZ_SR"]              =  new TH1D("M_ZZ_SR", "ZZ Invariant Mass ",                1000,0,5000);
+  h["delta_yjj_SR"]         =  new TH1D("delta_yjj_SR", "delta Y_jj ",                  200,-10,10);
+  h["pT_ZZ_SR"]             =  new TH1D("pT_ZZ_SR", "pT ZZ ",                           1000,0,5000);
+ 
   //CR
-  h["M_jj_CR"] =  new TH1D("M_jj_CR", "di-jet Invariant Mass CR", 1000,0,5000);
+  h["M_jj_CR"]              =  new TH1D("M_jj_CR", "di-jet Invariant Mass ",            1000,0,5000);
+  h["M_ZZ_CR"]              =  new TH1D("M_ZZ_CR", "ZZ Invariant Mass ",                1000,0,5000);
+  h["delta_yjj_CR"]         =  new TH1D("delta_yjj_CR", "delta Y_jj ",                  200,-10,10);
+  h["pT_ZZ_CR"]             =  new TH1D("pT_ZZ_CR", "pT ZZ ",                           1000,0,5000);
+ 
+  //SR_def
+  h["M_jj_SR_def"]          =  new TH1D("M_jj_SR_def", "di-jet Invariant Mass ",            1000,0,5000);
+  h["M_ZZ_SR_def"]          =  new TH1D("M_ZZ_SR_def", "ZZ Invariant Mass ",                1000,0,5000);
+  h["delta_yjj_SR_def"]     =  new TH1D("delta_yjj_SR_def", "delta Y_jj",                   200,-10,10);
+  h["pT_ZZ_SR_def"]         =  new TH1D("pT_ZZ_SR_def", "pT ZZ ",                           1000,0,5000);
+  
+  
+  //CR_def
+  h["M_jj_CR_def"]          =  new TH1D("M_jj_CR_def", "di-jet Invariant Mass",            1000,0,5000);
+  h["M_ZZ_CR_def"]          =  new TH1D("M_ZZ_CR_def", "ZZ Invariant Mass",                1000,0,5000);
+  h["delta_yjj_CR_def"]     =  new TH1D("delta_yjj_CR_def", "delta Y_jj ",                 200,-10,10);
+  h["pT_ZZ_CR_def"]         =  new TH1D("pT_ZZ_CR_def", "pT ZZ",                           1000,0,5000);
+ 
+  
+  
   
 }
 
@@ -368,6 +476,11 @@ void MiniTree_Analyzer::SlaveTerminate()
   double lumi_sample = nevents/_xs;
   double lumi_target = 140; //fb^{-1}
   double sf = lumi_target/lumi_sample;
+  double weight_SR = sum_of_weight_SR;
+  double weight_CR = sum_of_weight_CR;
+  double weight_SR_def = sum_of_weight_SR_def;
+  double weight_CR_def = sum_of_weight_CR_def;
+  
   cout<<_xs<<endl;
   //Writing the summary file
   fstream file(_sumfilename, ios::out);
@@ -375,8 +488,16 @@ void MiniTree_Analyzer::SlaveTerminate()
   file<<"Total Number of Events ran     = "<<nevents<<endl;
   file<<"Total Number of Events in SR   = "<<n_SR<<endl;
   file<<"Total Number of Events in CR   = "<<n_CR<<endl;
-  file<<"Total Number of Events in SR (Normalized to Luminosity = 140 fb^(-1))   = "<<sf*n_SR<<endl;
-  file<<"Total Number of Events in CR (Normalized to Luminosity = 140 fb^(-1))  = "<<sf*n_CR<<endl;
+  file<<"Total Number of Events in Lumi Scaled SR   = "<<n_SR*sf<<endl;
+  file<<"Total Number of Events in Lumi Scaled CR   = "<<n_CR*sf<<endl;  
+  file<<"Total Number of Events in SR        = "<<163855*weight_SR<<endl;
+  file<<"Total Number of Events in CR        = "<<163855*weight_CR<<endl;
+  file<<"Total Number of Events in SR_def    = "<<163885*weight_SR_def<<endl;
+  file<<"Total Number of Events in CR_def    = "<<163885*weight_CR_def<<endl;
+  file<<"Total Event Weight:  " <<sum_of_weight<<endl;
+  file<<"Avg Event Weight/ event:  " <<sum_of_weight/nevents<<endl;  
+  file<<"Lumi Sample:   " <<lumi_sample<<endl;
+  file<<"Lumi Sample/event:   " <<lumi_sample/nevents<<endl;
   
   file.close();
 }
